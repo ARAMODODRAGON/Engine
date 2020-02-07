@@ -1,97 +1,111 @@
-#include "PhysicsScene.h"
-#include "../Debug.h"
-#include "Body.h"
-#include "Transform.h"
+#include "PhysicsScene.hpp"
+#include "../Core/Debug.hpp"
+//#include "Collisions.hpp"
 
-PhysicsScene* PhysicsScene::singleton = nullptr;
-PhysicsScene* PhysicsScene::GetSingleton() {
-	return singleton;
-}
+namespace Physics {
 
-PhysicsScene::PhysicsScene(const uint& substeps_)
-	: substeps(substeps_), physList(PhysList()) {
-	// set the singleton
-	if (singleton) Debug::PrintError("there are multiple physics scenes");
-	else singleton = this;
-}
-
-PhysicsScene::~PhysicsScene() {
-	// delete the singleton
-	if (singleton == this) singleton = false;
-}
-
-void PhysicsScene::DoStep(const float& delta) {
-	// call substep the set number of times
-	for (ubyte i = 0; i < substeps; i++) {
-		// call substep with the set delta value
-		DoSubstep(delta / substeps);
+	PhysicsScene::PhysicsScene(uint substeps_)
+		: substeps(substeps_) {
+		if (substeps < 1) substeps = 1;
+		if (substeps > 6) substeps = 6;
 	}
-}
 
-void PhysicsScene::AddBody(Body* body) {
-	BNode* node = new BNode();
-	node->body = body;
-	node->bounds = body->GetNewBounds();
-	physList.push_back(node);
-}
+	PhysicsScene::~PhysicsScene() { }
 
-void PhysicsScene::RemoveBody(Body* body) {
-	// find the body and remove it
-	physList.remove_if([body](BNode* node)->bool {
-		return node->body == body;
-	});
-}
-
-void PhysicsScene::DoSubstep(const float& delta) {
-	for (BNode* node : physList) {
-		// first move the body
-		SubstepPhysics(node->bounds, node->body, delta);
-
-		// then check collisions against every other body
-		SubstepCollisions(node);
+	void PhysicsScene::SetSubsteps(uint substeps_) {
+		substeps = substeps_;
+		if (substeps < 1) substeps = 1;
+		if (substeps > 6) substeps = 6;
 	}
-}
 
-void PhysicsScene::SubstepPhysics(Bounds& bounds, Body* body, const float& delta) {
-	// dynamic bodies have full physics
-	// kinematic bodies dont move but still update their bounds
-	// static bodies should never move and so they should never update thier bounds or physics
-
-	if (body->bodyType == BodyType::Dynamic) {
-		// calculate linear velocity and position
-		body->velocity += body->acceleration * delta;
-		body->GetTransform()->position += body->velocity * delta;
-		// calculate angular velociy and rotation
-		body->angularVelocity += body->angularAcceleration * delta;
-		body->GetTransform()->rotation += body->angularVelocity * delta;
-		// update the bounds
-		bounds = body->GetNewBounds();
+	void PhysicsScene::AddBody(Body* body) {
+		body_list.push_back(new Node(body));
 	}
-	if (body->bodyType == BodyType::Kinematic) {
-		// update the bounds
-		bounds = body->GetNewBounds();
+
+	void PhysicsScene::RemoveBody(Body* body) {
+		body_list.remove_if([body](Node* node)-> bool {
+			return node->body == body;
+		});
 	}
-}
 
-void PhysicsScene::SubstepCollisions(BNode* node) {
-	for (BNode* other : physList) {
-		// skip itself
-		if (node->body == other->body) continue;
+	void PhysicsScene::DoStep(const float& delta) {
+		// constants
+		const float subdelta = delta / substeps;
+		const uint steps = substeps;
 
-		// check if the bounds overlap, if so do collisions
-		if (Bounds::Intersects(node->bounds, other->bounds)) {
-			// overlaps, now check and do collisions
-			CheckCollisions(node->body, other->body);
+		// start looping through bodies
+		for (Node* node : body_list) {
+			for (size_t i = 0; i < substeps; ++i) {
+
+				// update physics
+				UpdatePhysics(subdelta, node->body, node->bounds);
+
+				// check for and update collisions
+				CheckCollisions(subdelta, node->body, node->bounds, node->body->shape);
+
+				// update dynamics
+
+
+			}
+		}
+	}
+
+	void PhysicsScene::UpdatePhysics(const float& delta, Body* body, Bounds& bounds) {
+		if (body->type == BodyType::Dynamic) {
+			// update position and velocity
+			body->velocity += body->acceleration * delta;
+			body->position += body->velocity * delta;
+
+			// update bounds
+			bounds = body->GetBounds();
+		}
+	}
+
+	void PhysicsScene::CheckCollisions(const float& delta, Body* body, Bounds& bounds, Shape* shape) {
+		// loop through all bodies and check for collisions
+		for (Node* node : body_list) {
+			// skip self
+			if (body == node->body) continue;
+
+			// skip if static
+			if (body->type == BodyType::Static) continue;
+
+
+			// the two bounds overlap
+			if (Bounds::Intersects(bounds, node->bounds)) {
+
+				Debug::Print("Two bodies have inersected!");
+
+				// now figure out what collision function to call
+				DetermineCollision(delta, body, body->shape, node->body, node->body->shape);
+			}
 		}
 
 	}
-}
 
-void PhysicsScene::CheckCollisions(Body* bodyA, Body* bodyB) {
+	void PhysicsScene::DetermineCollision(
+		const float& delta,
+		Body* bodyA,
+		Shape* shapeA,
+		Body* bodyB,
+		Shape* shapeB
+	) {
+		// figure out what kind of colliders are colliding and call the correct collision function
 
-	Debug::Print("the bodies have intersected!");
+		switch (shapeA->GetShapeType()) {
+			case ShapeType::Circle:
+				switch (shapeB->GetShapeType()) {
+					case ShapeType::Circle:
+						//if (bodyB->type == BodyType::Dynamic)
+							//Collisions::Circle_DynamCircle(delta, bodyA, dynamic_cast<Circle*>(shapeA), bodyB, dynamic_cast<Circle*>(shapeB));
+						//else
+							//Collisions::Circle_StaticCircle(delta, bodyA, dynamic_cast<Circle*>(shapeA), bodyB, dynamic_cast<Circle*>(shapeB));
+						return;
+					default: Debug::PrintError("Shape type not permitted"); return;
+				} break;
+			default: Debug::PrintError("Shape type not permitted"); return;
+		}
 
-	bodyA->CollisionAlert();
-	bodyB->CollisionAlert();
+	}
 
 }

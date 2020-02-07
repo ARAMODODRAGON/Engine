@@ -1,17 +1,17 @@
 #include <SDL.h>
-#include "Engine/GameObject.h"
-#include "Engine/Component.h"
-#include "Engine/Physics/Body.h"
-#include "Testing/CollisionChecker.h"
-#include "Testing/TestGame.h"
+#include "Engine/Core/Window.hpp"
+#include "Engine/Core/Timer.hpp"
 
 int main(int argc, char* argv[]) {
 
-	TestGame* game = new TestGame();
+	Window* window = new Window();
+	window->OnCreate("Collision Engine Simplified", 1280, 720);
+	Timer* timer = new Timer();
+	timer->Start();
 
-	game->Run();
 
-	delete game; game = nullptr;
-
+	
+	delete window; window = nullptr;
+	delete timer; timer = nullptr;
 	return 0;
 }
