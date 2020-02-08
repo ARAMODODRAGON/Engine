@@ -56,7 +56,8 @@ namespace Physics {
 
 		/// functions
 
-		void DetermineCollision(const float& delta, Body* bodyA, Shape* shapeA, Body* bodyB, Shape* shapeB);
+		void DetermineStaticCollision(Body* bodyA, Shape* shapeA, Body* bodyB, Shape* shapeB);
+		void DetermineDynamCollision(Body* bodyA, Shape* shapeA, Body* bodyB, Shape* shapeB);
 
 	};
 

@@ -1,62 +1,30 @@
 #include "Collisions.hpp"
 #include <math.h>
+#include "../Core/Debug.hpp"
 
 namespace Physics {
 
-	void Collisions::Circle_DynamCircle(
-		const float& delta,
-		Body* bodyA, 
-		Circle* circleA,
-		Body* bodyB,
-		Circle* circleB
-	) {
-		// distance between bodies (points to A)
-		Vector2 distance = bodyA->position - bodyB->position;
-		// the min distance for the circles to overlap
-		float minDistSqr = (circleA->radius * circleA->radius + circleB->radius * circleB->radius);
-
-		// the circles are overlapping
-		if (distance.SqrLength() < minDistSqr) {
-
-			// calculate push
-			// the direction from B to A multiplied by the overlapping distance
-			Vector2 push = distance.Normalized() * sqrtf(minDistSqr - distance.SqrLength());
-
-			// push bodyA and apply to velocity
-			bodyA->position += push;
-			bodyA->velocity += push;
-
-			// reverse and apply to bodyB
-			push = -push;
-			bodyB->position += push;
-			bodyB->velocity += push;
-		}
-	}
-
-	void Collisions::Circle_StaticCircle(
-		const float& delta,
-		Body* bodyA,
+	void Collisions::Circle_StaticCircle(Body* bodyA,
 		Circle* circleA,
 		const Body* bodyB,
 		const Circle* circleB
 	) {
-		// distance between bodies (points to A)
+		// distance between the two bodies (points to A)
 		Vector2 distance = bodyA->position - bodyB->position;
-		// the min distance for the circles to overlap
-		float minDistSqr = (circleA->radius * circleA->radius + circleB->radius * circleB->radius);
+		float minDist = circleA->radius + circleB->radius;
 
-		// the circles are overlapping
-		if (distance.SqrLength() < minDistSqr) {
+		if (distance.SqrLength() < minDist * minDist) {
+			// points to A
+			Vector2 pushDir = distance.Normalized();
+			float pushDist = minDist - distance.Length();
 
-			// calculate push
-			// the direction from B to A multiplied by the overlapping distance
-			Vector2 push = distance.Normalized() * sqrtf(minDistSqr - distance.SqrLength());
+			// push A
+			bodyA->position += pushDir * pushDist;
+			bodyA->velocity += pushDir * pushDist;
 
-			// push bodyA and apply to velocity
-			bodyA->position += push;
-			bodyA->velocity += push;
 
 		}
 	}
+
 
 }

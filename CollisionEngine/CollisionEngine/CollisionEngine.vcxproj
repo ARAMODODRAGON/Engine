@@ -130,19 +130,23 @@
     <ClCompile Include="Engine\Core\Debug.cpp" />
     <ClCompile Include="Engine\Core\Timer.cpp" />
     <ClCompile Include="Engine\Core\Window.cpp" />
+    <ClCompile Include="Engine\Math\Point.cpp" />
     <ClCompile Include="Engine\Math\Vector2.cpp" />
     <ClCompile Include="Engine\Physics\Body.cpp" />
     <ClCompile Include="Engine\Physics\Bounds.cpp" />
     <ClCompile Include="Engine\Physics\Circle.cpp" />
     <ClCompile Include="Engine\Physics\Collisions.cpp" />
     <ClCompile Include="Engine\Physics\PhysicsScene.cpp" />
+    <ClCompile Include="Engine\Rendering\Shader.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Engine\Rendering\Texture2D.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Common.hpp" />
     <ClInclude Include="Engine\Core\Debug.hpp" />
     <ClInclude Include="Engine\Core\Timer.hpp" />
     <ClInclude Include="Engine\Core\Window.hpp" />
+    <ClInclude Include="Engine\Math\Point.hpp" />
     <ClInclude Include="Engine\Math\Vector2.hpp" />
     <ClInclude Include="Engine\Physics\Body.hpp" />
     <ClInclude Include="Engine\Physics\Bounds.hpp" />
@@ -150,6 +154,12 @@
     <ClInclude Include="Engine\Physics\Collisions.hpp" />
     <ClInclude Include="Engine\Physics\PhysicsScene.hpp" />
     <ClInclude Include="Engine\Physics\Shape.hpp" />
+    <ClInclude Include="Engine\Rendering\Shader.hpp" />
+    <ClInclude Include="Engine\Rendering\Texture2D.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Engine\Core\DebugShader\DebugShader.frag" />
+    <None Include="Engine\Core\DebugShader\DebugShader.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

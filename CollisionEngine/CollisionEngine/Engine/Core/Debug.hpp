@@ -1,14 +1,59 @@
 #ifndef DEBUG_HPP
 #define DEBUG_HPP
 #include "../Common.hpp"
-#include <string>
+#include "../Math/Vector2.hpp"
+#include "../Rendering/Shader.hpp"
+#include "../Physics/Bounds.hpp"
 
 class Debug {
 
+	static Shader shader;
+	static GLuint scalarLoc;
+	static GLuint offsetLoc;
+	static GLuint colorLoc;
+
+	static GLuint circleVBO, circleVAO;
+	static GLuint boundsVBO, boundsVAO;
+
+	struct CircleShape {
+		Vector2 position;
+		float radius;
+		CircleShape(Vector2 position_, float radius_)
+			: position(position_), radius(radius_) { }
+	};
+	static list<CircleShape> circleShapes_list;
+
+	struct BoundsShape {
+		Vector2 position;
+		Vector2 extents;
+		BoundsShape(Vector2 position_, Vector2 extents_) 
+			: position(position_), extents(extents_) { }
+	};
+	static list<BoundsShape> boundsShapes_list;
+
+
 public:
 
-	static void Print(std::string text);
-	static void PrintError(std::string text);
+	static void Init();
+	static void DrawShapes();
+	static void Exit();
+
+	static void Print(string text);
+	static void PrintError(string text);
+
+	static void DrawCircle(Vector2 position, float radius) {
+		circleShapes_list.push_back(CircleShape(position, radius));
+	}
+	static void DrawBounds(Bounds b) {
+		Vector2 extents;
+		extents.x = b.w / 2.0f;
+		extents.y = b.h / 2.0f;
+		Vector2 position;
+		position.x = b.x + extents.x;
+		position.y = b.y + extents.y;
+		boundsShapes_list.push_back(BoundsShape(position, extents));
+	}
+
 
 };
 

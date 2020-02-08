@@ -4,8 +4,8 @@
 
 struct Bounds {
 
-	float minX, minY;
-	float maxX, maxY;
+	// members
+	float x, y, w, h;
 
 	Bounds();
 	Bounds(const float& minX, const float& minY, const float& maxX, const float& maxY);

@@ -1,20 +1,18 @@
 #include "Bounds.hpp"
 
-Bounds::Bounds()
-	: minX(0.0f), minY(0.0f), maxX(1.0f), maxY(1.0f) { }
+Bounds::Bounds() : x(0.0f), y(0.0f), w(0.0f), h(0.0f) { }
 
-Bounds::Bounds(const float& minX_, const float& minY_, const float& maxX_, const float& maxY_) 
-	: minX(minX_), minY(minY_), maxX(maxX_), maxY(maxY_) { }
+Bounds::Bounds(const float& minX, const float& minY, const float& maxX, const float& maxY)
+	: x(minX), y(minY), w(maxX - minX), h(maxY - minY) { }
 
 Bounds::Bounds(const Vector2& min, const Vector2& max)
-	: minX(min.x), minY(min.y), maxX(max.x), maxY(max.y) { }
+	: x(min.x), y(min.y), w(max.x - min.x), h(max.y - min.y) { }
 
 bool Bounds::Intersects(const Bounds& a, const Bounds& b) {
-	return (a.minX > b.minX && a.minX < b.maxX) || (b.minX > a.minX && b.minX < a.maxX)
-		&& (a.minY > b.minY && a.minY < b.maxY) || (b.minY > a.minY && b.minY < a.maxY);
+	return ((a.x <= b.x && (a.x + a.w) >= b.x) || (b.x <= a.x && (b.x + b.w) >= a.x))
+		&& ((a.y <= b.y && (a.y + a.h) >= b.y) || (b.y <= a.y && (b.y + b.h) >= a.y));
 }
 
 bool Bounds::Contains(const Bounds& con, const Bounds& bo) {
-	return con.minX < bo.minX && con.maxX > bo.maxX
-		&& con.minY < bo.minY && con.maxY > bo.maxY;
+	return false;
 }

@@ -3,6 +3,8 @@
 
 #include <list>
 using std::list;
+#include <string>
+using std::string;
 
 typedef unsigned char ubyte;
 typedef unsigned short ushort;

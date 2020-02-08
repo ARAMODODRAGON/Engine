@@ -1,6 +1,6 @@
 #include "PhysicsScene.hpp"
 #include "../Core/Debug.hpp"
-//#include "Collisions.hpp"
+#include "Collisions.hpp"
 
 namespace Physics {
 
@@ -10,7 +10,12 @@ namespace Physics {
 		if (substeps > 6) substeps = 6;
 	}
 
-	PhysicsScene::~PhysicsScene() { }
+	PhysicsScene::~PhysicsScene() {
+		for (Node* node : body_list) {
+			delete node;
+		}
+		body_list.clear();
+	}
 
 	void PhysicsScene::SetSubsteps(uint substeps_) {
 		substeps = substeps_;
@@ -35,6 +40,7 @@ namespace Physics {
 
 		// start looping through bodies
 		for (Node* node : body_list) {
+
 			for (size_t i = 0; i < substeps; ++i) {
 
 				// update physics
@@ -42,9 +48,6 @@ namespace Physics {
 
 				// check for and update collisions
 				CheckCollisions(subdelta, node->body, node->bounds, node->body->shape);
-
-				// update dynamics
-
 
 			}
 		}
@@ -62,50 +65,59 @@ namespace Physics {
 	}
 
 	void PhysicsScene::CheckCollisions(const float& delta, Body* body, Bounds& bounds, Shape* shape) {
+		// dont check collisions if its static
+		if (body->type == BodyType::Static) return;
+
 		// loop through all bodies and check for collisions
 		for (Node* node : body_list) {
 			// skip self
 			if (body == node->body) continue;
 
-			// skip if static
-			if (body->type == BodyType::Static) continue;
-
-
 			// the two bounds overlap
 			if (Bounds::Intersects(bounds, node->bounds)) {
-
-				Debug::Print("Two bodies have inersected!");
-
 				// now figure out what collision function to call
-				DetermineCollision(delta, body, body->shape, node->body, node->body->shape);
+				if (node->body->type == BodyType::Dynamic)
+					DetermineDynamCollision(body, body->shape, node->body, node->body->shape);
+				else
+					DetermineStaticCollision(body, body->shape, node->body, node->body->shape);
 			}
 		}
 
 	}
 
-	void PhysicsScene::DetermineCollision(
-		const float& delta,
+	void PhysicsScene::DetermineStaticCollision(
 		Body* bodyA,
 		Shape* shapeA,
 		Body* bodyB,
 		Shape* shapeB
 	) {
-		// figure out what kind of colliders are colliding and call the correct collision function
-
 		switch (shapeA->GetShapeType()) {
 			case ShapeType::Circle:
+
 				switch (shapeB->GetShapeType()) {
 					case ShapeType::Circle:
-						//if (bodyB->type == BodyType::Dynamic)
-							//Collisions::Circle_DynamCircle(delta, bodyA, dynamic_cast<Circle*>(shapeA), bodyB, dynamic_cast<Circle*>(shapeB));
-						//else
-							//Collisions::Circle_StaticCircle(delta, bodyA, dynamic_cast<Circle*>(shapeA), bodyB, dynamic_cast<Circle*>(shapeB));
-						return;
+						Collisions::Circle_StaticCircle(
+							bodyA,
+							dynamic_cast<Circle*>(shapeA),
+							bodyB,
+							dynamic_cast<Circle*>(shapeB)
+						); return;
 					default: Debug::PrintError("Shape type not permitted"); return;
 				} break;
+
 			default: Debug::PrintError("Shape type not permitted"); return;
 		}
+	}
 
+	void PhysicsScene::DetermineDynamCollision(
+		Body* bodyA,
+		Shape* shapeA,
+		Body* bodyB,
+		Shape* shapeB
+	) {
+		switch (shapeA->GetShapeType()) {
+			default: Debug::PrintError("Shape type not permitted"); return;
+		}
 	}
 
 }
