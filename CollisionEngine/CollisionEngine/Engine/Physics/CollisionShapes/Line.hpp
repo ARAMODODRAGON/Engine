@@ -7,17 +7,25 @@ namespace Physics {
 	class Line : public Shape {
 		friend class Collisions;
 
-		Vector2 pointA, pointB;
+		Vector2 start, end;
 
 	public:
 
-		Line() : Shape(), pointA(Vector2::ZERO), pointB(Vector2::ZERO) { }
+		Line() : Shape(), start(Vector2::ZERO), end(Vector2::ZERO) { }
 
 
-		// getters
+		/// getters
 
 		virtual Bounds GetBounds(const Vector2& position) override;
 		virtual ShapeType GetShapeType() const override { return ShapeType::Line; }
+		Vector2 GetStart() { return start; }
+		Vector2 GetEnd() { return end; }
+
+
+		/// setters
+
+		void SetStart(const Vector2& start_);
+		void SetEnd(const Vector2& end_);
 
 	};
 

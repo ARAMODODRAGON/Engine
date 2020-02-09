@@ -1,14 +1,24 @@
 #include "Line.hpp"
+#include "../Bodies/Body.hpp"
 
 namespace Physics {
 
 	Bounds Line::GetBounds(const Vector2& pos) {
 		Bounds bounds;
-		bounds.min.x = (pointA.x < pointB.x ? pointA.x : pointB.x);
-		bounds.min.y = (pointA.y < pointB.y ? pointA.y : pointB.y);
-		bounds.max.x = (pointA.x > pointB.x ? pointA.x : pointB.x);
-		bounds.max.y = (pointA.y > pointB.y ? pointA.y : pointB.y);
+		bounds.min.x = (start.x < end.x ? start.x : end.x) + pos.x;
+		bounds.min.y = (start.y < end.y ? start.y : end.y) + pos.y;
+		bounds.max.x = (start.x > end.x ? start.x : end.x) + pos.x;
+		bounds.max.y = (start.y > end.y ? start.y : end.y) + pos.y;
+		printf("%f %f pos", bounds.max.x, bounds.max.y);
 		return bounds;
+	}
+
+	void Line::SetStart(const Vector2& start_) { 
+		start = start_; body->UpdateBounds();
+	}
+
+	void Line::SetEnd(const Vector2& end_) { 
+		end = end_; body->UpdateBounds();
 	}
 
 }

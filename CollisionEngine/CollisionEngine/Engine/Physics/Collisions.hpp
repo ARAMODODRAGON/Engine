@@ -4,19 +4,24 @@
 #include "Bodies/Staticbody.hpp"
 #include "CollisionShapes/Shape.hpp"
 #include "CollisionShapes/Circle.hpp"
+#include "CollisionShapes/Line.hpp"
 
 namespace Physics {
 
 	/// static class that check for and do collisions between bodies and colliders
 	class Collisions {
+
+		static Vector2 ClosestPointOnLine(float lx1, float ly1, float lx2, float ly2, float x0, float y0);
+		static Vector2 CalculateBounceVelocity(const Vector2& velocity, const Vector2& surfaceNorm, const float& bounceA, const float& bounceB);
+
 	public:
 
 		/// circle circle
 		////static void RigidCircle_RigidCircle(const float& delta, Body* bodyA, Circle* circleA, Body* bodyB, Circle* circleB);
-		static void RigidCircle_StaticCircle(Rigidbody* bodyA, Circle* circleA, const Staticbody* bodyB, const Circle* circleB);
+		static void RigidCircle_StaticCircle(Rigidbody* bodyA, Circle* shapeA, const Staticbody* bodyB, const Circle* shapeB);
 		/// circle line
 		////static void RigidCircle_RigidLine();
-		////static void RigidCircle_StaticLine(); // next
+		static void RigidCircle_StaticLine(Rigidbody* bodyA, Circle* shapeA, const Staticbody* bodyB, const Line* shapeB); // next
 		/// circle box
 		////static void RigidCircle_RigidBox();
 		////static void RigidCircle_StaticBox();

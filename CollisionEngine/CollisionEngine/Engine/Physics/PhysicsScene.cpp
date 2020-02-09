@@ -31,7 +31,7 @@ namespace Physics {
 		if (substeps > 20) substeps = 20;
 	}
 
-	void PhysicsScene::SetTimestep(float timestep_) { 
+	void PhysicsScene::SetTimestep(float timestep_) {
 		timestep = timestep_;
 		if (timestep <= 0.001f) timestep = 0.001f;
 	}
@@ -83,7 +83,7 @@ namespace Physics {
 			DoSubstep(subdelta, _substeps);
 	}
 
-	void PhysicsScene::DoSubstep(const float& subdelta, const size_t& steps) { 
+	void PhysicsScene::DoSubstep(const float& subdelta, const size_t& steps) {
 		// start looping through bodies
 		for (Rigidbody* rbody : rigidList) {
 			// skip if it doesnt have a shape or if simulate is false
@@ -144,6 +144,13 @@ namespace Physics {
 					dynamic_cast<Circle*>(rShape),
 					sbody,
 					dynamic_cast<const Circle*>(sShape)
+				); return;
+			case ShapeType::Line:
+				Collisions::RigidCircle_StaticLine(
+					rbody,
+					dynamic_cast<Circle*>(rShape),
+					sbody,
+					dynamic_cast<const Line*>(sShape)
 				); return;
 			default: return;
 			}

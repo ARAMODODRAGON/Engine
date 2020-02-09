@@ -14,7 +14,7 @@ class Debug {
 	static GLuint colorLoc;
 
 	static GLuint circleVBO, circleVAO;
-	static GLuint boundsVBO, boundsVAO;
+	static GLuint lineVBO, lineVAO;
 
 	struct CircleShape {
 		Vector2 position;
@@ -22,16 +22,15 @@ class Debug {
 		CircleShape(Vector2 position_, float radius_)
 			: position(position_), radius(radius_) { }
 	};
-	static list<CircleShape> circleShapes_list;
+	static list<CircleShape> circleShapesList;
 
-	struct BoundsShape {
+	struct LineShape {
 		Vector2 position;
-		Vector2 extents;
-		BoundsShape(Vector2 position_, Vector2 extents_)
-			: position(position_), extents(extents_) { }
+		Vector2 direction;
+		LineShape(Vector2 start_, Vector2 end_)
+			: position(start_), direction(end_ - start_) { }
 	};
-	static list<BoundsShape> boundsShapes_list;
-
+	static list<LineShape> lineShapesList;
 
 public:
 
@@ -43,16 +42,28 @@ public:
 	static void PrintError(string text);
 
 	static void DrawCircle(Vector2 position, float radius) {
-		circleShapes_list.push_back(CircleShape(position, radius));
+		circleShapesList.push_back(CircleShape(position, radius));
 	}
 	static void DrawBounds(Bounds b) {
-		Vector2 extents;
-		extents.x = (b.max.x - b.min.x) / 2.0f;
-		extents.y = (b.max.y - b.min.y) / 2.0f;
-		Vector2 position;
-		position.x = b.min.x + extents.x;
-		position.y = b.min.y + extents.y;
-		boundsShapes_list.push_back(BoundsShape(position, extents));
+		lineShapesList.push_back(LineShape(
+			Vector2(b.min.x, b.min.y),
+			Vector2(b.min.x, b.max.y)
+		));
+		lineShapesList.push_back(LineShape(
+			Vector2(b.min.x, b.max.y),
+			Vector2(b.max.x, b.max.y)
+		));
+		lineShapesList.push_back(LineShape(
+			Vector2(b.max.x, b.max.y),
+			Vector2(b.max.x, b.min.y)
+		));
+		lineShapesList.push_back(LineShape(
+			Vector2(b.max.x, b.min.y),
+			Vector2(b.min.x, b.min.y)
+		));
+	}
+	static void DrawLine(Vector2 start, Vector2 end) {
+		lineShapesList.push_back(LineShape(start, end));
 	}
 
 

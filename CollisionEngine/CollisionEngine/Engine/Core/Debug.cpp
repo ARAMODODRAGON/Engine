@@ -10,11 +10,11 @@ GLuint Debug::colorLoc = 0;
 
 GLuint Debug::circleVBO = 0;
 GLuint Debug::circleVAO = 0;
-GLuint Debug::boundsVAO = 0;
-GLuint Debug::boundsVBO = 0;
+GLuint Debug::lineVAO = 0;
+GLuint Debug::lineVBO = 0;
 
-list<Debug::CircleShape> Debug::circleShapes_list;
-list<Debug::BoundsShape> Debug::boundsShapes_list;
+list<Debug::CircleShape> Debug::circleShapesList;
+list<Debug::LineShape> Debug::lineShapesList;
 
 #pragma region vertex and indices arrays
 
@@ -33,12 +33,9 @@ static Vector2 circleVerts[] = {
 	Vector2(-0.5f, -0.866f),
 };
 
-static Vector2 boundsVerts[] = {
-	Vector2(-1.0f, -1.0f),
-	Vector2(1.0f, -1.0f),
+static Vector2 lineVerts[] = {
+	Vector2(0.0f, 0.0f),
 	Vector2(1.0f, 1.0f),
-	Vector2(-1.0f, 1.0f),
-	Vector2(-1.0f, -1.0f),
 };
 
 #pragma endregion
@@ -57,11 +54,11 @@ void Debug::Init() {
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(Vector2), (GLvoid*)0);
 
-	glGenBuffers(1, &boundsVBO);
-	glGenVertexArrays(1, &boundsVAO);
-	glBindVertexArray(boundsVAO);
-	glBindBuffer(GL_ARRAY_BUFFER, boundsVBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(boundsVerts), boundsVerts, GL_STATIC_DRAW);
+	glGenBuffers(1, &lineVBO);
+	glGenVertexArrays(1, &lineVAO);
+	glBindVertexArray(lineVAO);
+	glBindBuffer(GL_ARRAY_BUFFER, lineVBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(lineVerts), lineVerts, GL_STATIC_DRAW);
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(Vector2), (GLvoid*)0);
 
@@ -77,7 +74,7 @@ void Debug::DrawShapes() {
 	glUniform4f(colorLoc, 0.0f, 1.0f, 0.0f, 1.0f); // green
 
 	glBindVertexArray(circleVAO);
-	for (CircleShape& circle : circleShapes_list) {
+	for (CircleShape& circle : circleShapesList) {
 
 		glUniform2f(scalarLoc, circle.radius, circle.radius);
 		glUniform2f(offsetLoc, circle.position.x, circle.position.y);
@@ -86,18 +83,18 @@ void Debug::DrawShapes() {
 		glDrawArrays(GL_LINE_LOOP, 0, 12);
 
 	}
-	circleShapes_list.clear();
+	circleShapesList.clear();
 
-	glBindVertexArray(boundsVAO);
-	for (BoundsShape& bound : boundsShapes_list) {
+	glBindVertexArray(lineVAO);
+	for (LineShape& line : lineShapesList) {
 
-		glUniform2f(scalarLoc, bound.extents.x, bound.extents.y);
-		glUniform2f(offsetLoc, bound.position.x, bound.position.y);
+		glUniform2f(scalarLoc, line.direction.x, line.direction.y);
+		glUniform2f(offsetLoc, line.position.x, line.position.y);
 
-		// draw bounds
+		// draw lines
 		glDrawArrays(GL_LINE_LOOP, 0, 4);
 	}
-	boundsShapes_list.clear();
+	lineShapesList.clear();
 
 	glBindVertexArray(0);
 }
@@ -107,8 +104,8 @@ void Debug::Exit() {
 
 	glDeleteVertexArrays(1, &circleVAO);
 	glDeleteBuffers(1, &circleVBO);
-	glDeleteVertexArrays(1, &boundsVAO);
-	glDeleteBuffers(1, &boundsVBO);
+	glDeleteVertexArrays(1, &lineVAO);
+	glDeleteBuffers(1, &lineVBO);
 }
 
 void Debug::Print(std::string text) {
