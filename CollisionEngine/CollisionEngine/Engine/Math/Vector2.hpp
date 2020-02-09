@@ -32,12 +32,6 @@ namespace Math {
 		Vector2 operator-() const;
 
 
-		/// static functions
-
-		static float Dot(const Vector2& v0, const Vector2& v1);
-		static Vector2 Normalized(const Vector2& vec);
-		static Vector2 Reflect(const Vector2& vec, const Vector2& normal);
-
 		/// static constants
 
 		static const Vector2 ZERO;

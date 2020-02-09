@@ -133,6 +133,7 @@
     <ClCompile Include="Engine\Math\FMath.cpp" />
     <ClCompile Include="Engine\Math\Point.cpp" />
     <ClCompile Include="Engine\Math\Vector2.cpp" />
+    <ClCompile Include="Engine\Math\VMath.cpp" />
     <ClCompile Include="Engine\Physics\CollisionShapes\Circle.cpp" />
     <ClCompile Include="Engine\Physics\Collisions.cpp" />
     <ClCompile Include="Engine\Physics\CollisionShapes\Line.cpp" />
@@ -149,6 +150,7 @@
     <ClInclude Include="Engine\Math\FMath.hpp" />
     <ClInclude Include="Engine\Math\Point.hpp" />
     <ClInclude Include="Engine\Math\Vector2.hpp" />
+    <ClInclude Include="Engine\Math\VMath.hpp" />
     <ClInclude Include="Engine\Physics\Bodies\Body.hpp" />
     <ClInclude Include="Engine\Physics\Bodies\Rigidbody.hpp" />
     <ClInclude Include="Engine\Physics\Bodies\Staticbody.hpp" />

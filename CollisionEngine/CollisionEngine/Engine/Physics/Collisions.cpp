@@ -1,6 +1,7 @@
 #include "Collisions.hpp"
 #include "../Core/Debug.hpp"
 #include "../Math/FMath.hpp"
+#include "../Math/VMath.hpp"
 using namespace Math;
 
 namespace Physics {
@@ -40,7 +41,7 @@ namespace Physics {
 		const float& bounceA, 
 		const float& bounceB
 	) {
-		return Vector2::Reflect(velocity, Vector2::Normalized(surfaceNorm) * FMath::Halfway(bounceA, 1.0f - bounceB));
+		return VMath::Reflect(velocity, VMath::Normalized(surfaceNorm) * FMath::Halfway(bounceA, 1.0f - bounceB));
 	}
 
 
@@ -56,7 +57,7 @@ namespace Physics {
 
 		if (normal.SqrLength() < minDist * minDist) {
 			// points to A
-			normal = Vector2::Normalized(normal) * (minDist - normal.Length());
+			normal = VMath::Normalized(normal) * (minDist - normal.Length());
 
 			// push
 			bodyA->position += normal;
@@ -86,7 +87,7 @@ namespace Physics {
 
 		if (normal.SqrLength() < shapeA->radius * shapeA->radius) {
 			// points to A
-			normal = Vector2::Normalized(normal) * (shapeA->radius - normal.Length());
+			normal = VMath::Normalized(normal) * (shapeA->radius - normal.Length());
 
 			// push
 			bodyA->position += normal;

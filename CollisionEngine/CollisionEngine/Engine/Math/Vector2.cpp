@@ -52,22 +52,6 @@ namespace Math {
 		return Vector2(-x, -y);
 	}
 
-
-	float Vector2::Dot(const Vector2& v0, const Vector2& v1) {
-		return v0.x * v1.x + v0.y * v1.y;
-	}
-
-	Vector2 Vector2::Normalized(const Vector2& vec) {
-		float len = vec.Length();
-		if (FMath::NearlyZero(len, 0.00000000000001f)) return Vector2::ZERO;
-		return Vector2(vec.x / len, (vec.y / len));
-	}
-
-	Vector2 Vector2::Reflect(const Vector2& vec, const Vector2& normal) {
-		return vec + normal * Vector2::Dot(-vec, normal) * 2.0f;
-	}
-
-
 	const Vector2 Vector2::ZERO = Vector2(0.0f, 0.0f);
 	const Vector2 Vector2::UP = Vector2(0.0f, 1.0f);
 	const Vector2 Vector2::DOWN = Vector2(0.0f, -1.0f);
