@@ -1,6 +1,6 @@
 #include "Collisions.hpp"
 #include "../Core/Debug.hpp"
-#include "../Math/Mathf.hpp"
+#include "../Math/FMath.hpp"
 using namespace Math;
 
 namespace Physics {
@@ -40,7 +40,7 @@ namespace Physics {
 		const float& bounceA, 
 		const float& bounceB
 	) {
-		return Vector2::Reflect(velocity, Vector2::Normalized(surfaceNorm) * Mathf::Halfway(bounceA, 1.0f - bounceB));
+		return Vector2::Reflect(velocity, Vector2::Normalized(surfaceNorm) * FMath::Halfway(bounceA, 1.0f - bounceB));
 	}
 
 

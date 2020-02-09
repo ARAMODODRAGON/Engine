@@ -1,10 +1,10 @@
-#ifndef MATH_HPP
-#define MATH_HPP
+#ifndef FMATH_HPP
+#define FMATH_HPP
 
 namespace Math {
 
 	// a static class that contains common math functions
-	class Mathf {
+	class FMath {
 	public:
 
 		static float Clamp(float value, const float& min, const float& max);
@@ -18,4 +18,4 @@ namespace Math {
 
 }
 
-#endif // !MATH_HPP
+#endif // !FMATH_HPP

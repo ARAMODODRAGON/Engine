@@ -1,10 +1,10 @@
 #include "Vector2.hpp"
-#include "Mathf.hpp"
+#include "FMath.hpp"
 
 namespace Math {
 
 	float Vector2::Length() const {
-		return Mathf::Sqrt(x * x + y * y);
+		return FMath::Sqrt(x * x + y * y);
 	}
 
 	float Vector2::SqrLength() const {
@@ -59,7 +59,7 @@ namespace Math {
 
 	Vector2 Vector2::Normalized(const Vector2& vec) {
 		float len = vec.Length();
-		if (Mathf::NearlyZero(len, 0.00000000000001f)) return Vector2::ZERO;
+		if (FMath::NearlyZero(len, 0.00000000000001f)) return Vector2::ZERO;
 		return Vector2(vec.x / len, (vec.y / len));
 	}
 

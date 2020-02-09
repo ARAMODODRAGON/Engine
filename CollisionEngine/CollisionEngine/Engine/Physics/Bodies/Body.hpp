@@ -3,8 +3,8 @@
 #include "../../Common.hpp"
 #include "../../Math/Vector2.hpp"
 using Math::Vector2;
-#include "../../Math/Mathf.hpp"
-using Math::Mathf;
+#include "../../Math/FMath.hpp"
+using Math::FMath;
 #include "../CollisionShapes/Shape.hpp"
 
 namespace Physics {
@@ -67,7 +67,7 @@ namespace Physics {
 		// sets the bounciness of the rigidbody
 		// @param bounce: ranges from 0.0f to 1.0f
 		void SetBounce(const float& bounce_) { 
-			bounce = Mathf::Clamp(bounce_, 0.0f, 1.0f);
+			bounce = FMath::Clamp(bounce_, 0.0f, 1.0f);
 		}
 
 

@@ -130,7 +130,7 @@
     <ClCompile Include="Engine\Core\Debug.cpp" />
     <ClCompile Include="Engine\Core\Timer.cpp" />
     <ClCompile Include="Engine\Core\Window.cpp" />
-    <ClCompile Include="Engine\Math\Mathf.cpp" />
+    <ClCompile Include="Engine\Math\FMath.cpp" />
     <ClCompile Include="Engine\Math\Point.cpp" />
     <ClCompile Include="Engine\Math\Vector2.cpp" />
     <ClCompile Include="Engine\Physics\CollisionShapes\Circle.cpp" />
@@ -146,7 +146,7 @@
     <ClInclude Include="Engine\Core\Debug.hpp" />
     <ClInclude Include="Engine\Core\Timer.hpp" />
     <ClInclude Include="Engine\Core\Window.hpp" />
-    <ClInclude Include="Engine\Math\Mathf.hpp" />
+    <ClInclude Include="Engine\Math\FMath.hpp" />
     <ClInclude Include="Engine\Math\Point.hpp" />
     <ClInclude Include="Engine\Math\Vector2.hpp" />
     <ClInclude Include="Engine\Physics\Bodies\Body.hpp" />

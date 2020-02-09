@@ -48,10 +48,10 @@
     <ClCompile Include="Engine\Physics\CollisionShapes\Circle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Math\Mathf.cpp">
+    <ClCompile Include="Engine\Physics\CollisionShapes\Line.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Physics\CollisionShapes\Line.cpp">
+    <ClCompile Include="Engine\Math\FMath.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -104,10 +104,10 @@
     <ClInclude Include="Engine\Physics\Bodies\Staticbody.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Math\Mathf.hpp">
+    <ClInclude Include="Engine\Physics\CollisionShapes\Line.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Physics\CollisionShapes\Line.hpp">
+    <ClInclude Include="Engine\Math\FMath.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
