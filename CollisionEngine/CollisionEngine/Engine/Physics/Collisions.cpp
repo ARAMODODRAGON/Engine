@@ -1,27 +1,29 @@
 #include "Collisions.hpp"
-#include <math.h>
 #include "../Core/Debug.hpp"
+#include "../Math/Mathf.hpp"
+using namespace Math;
 
 namespace Physics {
 
-	void Collisions::Circle_StaticCircle(Body* bodyA,
+	void Collisions::RigidCircle_StaticCircle(
+		Rigidbody* bodyA,
 		Circle* circleA,
-		const Body* bodyB,
+		const Staticbody* bodyB,
 		const Circle* circleB
 	) {
 		// distance between the two bodies (points to A)
-		Vector2 distance = bodyA->position - bodyB->position;
+		Vector2 normal = bodyA->position - bodyB->position;
 		float minDist = circleA->radius + circleB->radius;
 
-		if (distance.SqrLength() < minDist * minDist) {
+		if (normal.SqrLength() < minDist * minDist) {
 			// points to A
-			Vector2 pushDir = distance.Normalized();
-			float pushDist = minDist - distance.Length();
+			normal = Vector2::Normalized(normal) * (minDist - normal.Length());
 
-			// push A
-			bodyA->position += pushDir * pushDist;
-			bodyA->velocity += pushDir * pushDist;
+			// push
+			bodyA->position += normal;
 
+			// bounce
+			bodyA->velocity = Vector2::Reflect(bodyA->velocity, Vector2::Normalized(normal) * Mathf::Halfway(bodyA->bounce, 1.0f - bodyB->bounce));
 
 		}
 	}

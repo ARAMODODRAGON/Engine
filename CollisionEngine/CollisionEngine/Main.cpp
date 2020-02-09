@@ -3,8 +3,17 @@
 #include "Engine/Core/Timer.hpp"
 #include "Engine/Core/Debug.hpp"
 #include "Engine/Physics/PhysicsScene.hpp"
-#include "Engine/Physics/Circle.hpp"
-#include "Engine/Physics/Body.hpp"
+#include "Engine/Physics/CollisionShapes/Circle.hpp"
+//#include "Engine/Physics/Body.hpp"
+#include "Engine/Math/Mathf.hpp"
+
+list<Physics::Circle*> circleList;
+Physics::Circle* CreateCircle() {
+	Physics::Circle* circle = new Physics::Circle();
+	circleList.push_back(circle);
+	return circle;
+}
+
 
 int main(int argc, char* argv[]) {
 
@@ -15,54 +24,69 @@ int main(int argc, char* argv[]) {
 	Debug::Init();
 
 	// physics
-	Physics::PhysicsScene* scene = new Physics::PhysicsScene(4);
+	Physics::PhysicsScene* scene = new Physics::PhysicsScene(20, 0.005f);
 
 
-	Physics::Body* bodyA = new Physics::Body();
-	Physics::Circle* circleA = new Physics::Circle();
+	Physics::Rigidbody* bodyA = scene->CreateRigidbody();
+	Physics::Circle* circleA = CreateCircle();
 	{
-		bodyA->position = Vector2(-0.1f, 1.0f);
-		bodyA->acceleration = Vector2(0.0f, -1.0f);
+		bodyA->SetAcceleration(Vector2(0.0f, -1.1f));
+		bodyA->SetBounce(0.9f);
 
-		circleA->radius = 0.08f;
+		circleA->SetRadius(0.08f);
 		bodyA->SetShape(circleA);
-
-		bodyA->SetBodyType(Physics::BodyType::Dynamic);
 	}
 
-
-	Physics::Body* bodyB = new Physics::Body();
-	Physics::Circle* circleB = new Physics::Circle();
 	{
-		bodyB->position = Vector2(0.0f, -0.5f);
+		Physics::Staticbody* sbody = nullptr;
+		Physics::Circle* scircle = nullptr;
 
-		circleB->radius = 0.3f;
-		bodyB->SetShape(circleB);
 
-		bodyB->SetBodyType(Physics::BodyType::Static);
+		sbody = scene->CreateStaticbody();
+		scircle = CreateCircle();
+		sbody->SetShape(scircle);
+		sbody->SetPosition(Vector2(0.39f, -0.3f));
+		sbody->SetBounce(0.0f);
+		scircle->SetRadius(0.3f);
+
+
+		sbody = scene->CreateStaticbody();
+		scircle = CreateCircle();
+		sbody->SetShape(scircle);
+		sbody->SetPosition(Vector2(-0.5f, -0.3f));
+		sbody->SetBounce(0.0f);
+		scircle->SetRadius(0.3f);
+		
+
+		sbody = scene->CreateStaticbody();
+		scircle = CreateCircle();
+		sbody->SetShape(scircle);
+		sbody->SetPosition(Vector2(-0.0f, -0.8f));
+		sbody->SetBounce(0.0f);
+		scircle->SetRadius(0.3f);
+
 	}
 
+	for (size_t i = 0; i < 1; ++i) {
 
-	scene->AddBody(bodyA);
-	scene->AddBody(bodyB);
+		// reset ball position
+		bodyA->SetPosition(Vector2(0.388f, 0.9f));
+		bodyA->SetVelocity(Vector2::ZERO);
 
-	float timer0 = 0.0f;
-
-	while (true) {
-
-		bodyA->position = Vector2(0.01f, 1.0f);
-		bodyA->acceleration = Vector2(0.0f, -0.8f);
-		bodyA->velocity = Vector2(0.0f);
-		timer0 = 0.0f;
-		while (timer0 < 4.0f) {
+		float timer0 = 0.0f;
+		while (timer0 < 12.5f) {
 			timer->UpdateGameTicks();
 			float delta = timer->GetDeltaTimer();
 			timer0 += delta;
 
-			Debug::DrawCircle(bodyA->position, circleA->radius);
-			Debug::DrawCircle(bodyB->position, circleB->radius);
-			//Debug::DrawBounds(bodyA->GetBounds());
-			//Debug::DrawBounds(bodyB->GetBounds());
+			// draw circles
+			for (Physics::Circle* circle : circleList) {
+				Physics::Body* body = circle->GetBody();
+				Debug::DrawCircle(body->GetPosition(), circle->GetRadius());
+				//Debug::DrawBounds(body->GetBounds());
+			}
+
+			//printf("pos(x:%f, y:%f)\n", bodyA->GetPosition().x, bodyA->GetPosition().y);
 
 			scene->DoStep(delta);
 
@@ -76,14 +100,14 @@ int main(int argc, char* argv[]) {
 			// swap buffers
 			SDL_GL_SwapWindow(window->GetWindow());
 			// wait for the end of the frame
-			SDL_Delay(timer->GetSleepTime(60));
+			SDL_Delay(timer->GetSleepTime(120));
 		}
 	}
 
 	Debug::Exit();
-	delete bodyA; bodyA = nullptr; circleA = nullptr;
-	delete bodyB; bodyB = nullptr; circleB = nullptr;
-	delete scene; scene = nullptr;
+	for (Physics::Circle* circle : circleList)
+		delete circle;
+	circleList.clear();
 	delete window; window = nullptr;
 	delete timer; timer = nullptr;
 	return 0;

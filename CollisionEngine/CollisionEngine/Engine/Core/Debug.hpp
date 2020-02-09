@@ -2,6 +2,7 @@
 #define DEBUG_HPP
 #include "../Common.hpp"
 #include "../Math/Vector2.hpp"
+using Math::Vector2;
 #include "../Rendering/Shader.hpp"
 #include "../Physics/Bounds.hpp"
 
@@ -26,7 +27,7 @@ class Debug {
 	struct BoundsShape {
 		Vector2 position;
 		Vector2 extents;
-		BoundsShape(Vector2 position_, Vector2 extents_) 
+		BoundsShape(Vector2 position_, Vector2 extents_)
 			: position(position_), extents(extents_) { }
 	};
 	static list<BoundsShape> boundsShapes_list;
@@ -46,11 +47,11 @@ public:
 	}
 	static void DrawBounds(Bounds b) {
 		Vector2 extents;
-		extents.x = b.w / 2.0f;
-		extents.y = b.h / 2.0f;
+		extents.x = (b.max.x - b.min.x) / 2.0f;
+		extents.y = (b.max.y - b.min.y) / 2.0f;
 		Vector2 position;
-		position.x = b.x + extents.x;
-		position.y = b.y + extents.y;
+		position.x = b.min.x + extents.x;
+		position.y = b.min.y + extents.y;
 		boundsShapes_list.push_back(BoundsShape(position, extents));
 	}
 

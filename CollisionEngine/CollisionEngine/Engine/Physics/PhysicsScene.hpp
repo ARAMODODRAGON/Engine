@@ -1,64 +1,61 @@
 #ifndef PHYSICS_SCENE_HPP
 #define PHYSICS_SCENE_HPP
 #include "../Common.hpp"
-#include "Body.hpp"
+#include "Bodies/Body.hpp"
+#include "Bodies/Rigidbody.hpp"
+#include "Bodies/Staticbody.hpp"
 
 namespace Physics {
 
 	class PhysicsScene {
-
-		struct Node {
-			Body* body;
-			Bounds bounds;
-
-			Node(Body* body_) : body(nullptr) {
-				body = body_;
-				bounds = body->GetBounds();
-			}
-
-			void UpdateBounds() {
-				bounds = body->GetBounds();
-			}
-		};
-
-		// the list of bodies
-		list<Node*> body_list;
-
+		// the lists of bodies
+		list<Rigidbody*> rigidList;
+		list<Staticbody*> staticList;
+		//list<Kinematicbody*> kinematicList;
+		
 		// the number of substeps that must be preformed
-		uint substeps;
+		size_t substeps;
+		float timestep;
 
 	public:
 
-		PhysicsScene(uint substeps);
+		PhysicsScene(uint substeps_, float timestep_);
 		~PhysicsScene();
+
 
 		/// setters
 
-		void SetSubsteps(uint substeps);
+		void SetSubsteps(uint substeps_);
+		// @param timestep_: minimum is 0.001f
+		void SetTimestep(float timestep_);
 
-		/// adding/removing bodies
 
-		void AddBody(Body* body);
-		void RemoveBody(Body* body);
+		/// creating/destroying bodies
+
+		Rigidbody* CreateRigidbody();
+		Staticbody* CreateStaticbody();
+		///Kinematicbody* CreateKinematicbody();
+		void DestoryRigidbody(Rigidbody* rbody);
+		void DestoryStaticbody(Staticbody* sbody);
+		///void DestoryKinematicbody(Kinematicbody* kbody);
 
 		/// public events
 
 		void DoStep(const float& delta);
 
+
 	private:
 
 		/// private events
 
-		void UpdatePhysics(const float& delta, Body* body, Bounds& bounds);
-		void CheckCollisions(const float& delta, Body* body, Bounds& bounds, Shape* shape);
-		//void UpdateDynamics(const float& delta);
+		void DoSubstep(const float& subdelta, const size_t& steps);
 
 
-		/// functions
+		/// private functions
 
-		void DetermineStaticCollision(Body* bodyA, Shape* shapeA, Body* bodyB, Shape* shapeB);
-		void DetermineDynamCollision(Body* bodyA, Shape* shapeA, Body* bodyB, Shape* shapeB);
-
+		void DetermineRigidStaticCollision(Rigidbody* rbody, Shape* rShape, const Staticbody* sbody, const Shape* sShape);
+		void DetermineRigidRigidCollision(Rigidbody* rbody0, Shape* rShape0, Rigidbody* rbody1, Shape* rShape1);
+		
 	};
 
 }

@@ -1,46 +1,48 @@
-#ifndef COLLISIONS_HPP
-#define COLLISIONS_HPP
-#include "Body.hpp"
-#include "Shape.hpp"
-#include "Circle.hpp"
+#ifndef PHYSICS_COLLISIONS_HPP
+#define PHYSICS_COLLISIONS_HPP
+#include "Bodies/Rigidbody.hpp"
+#include "Bodies/Staticbody.hpp"
+#include "CollisionShapes/Shape.hpp"
+#include "CollisionShapes/Circle.hpp"
 
 namespace Physics {
 
 	/// static class that check for and do collisions between bodies and colliders
-	struct Collisions {
+	class Collisions {
+	public:
 
 		/// circle circle
-		////static void Circle_DynamCircle(const float& delta, Body* bodyA, Circle* circleA, Body* bodyB, Circle* circleB);
-		static void Circle_StaticCircle(Body* bodyA, Circle* circleA, const Body* bodyB, const Circle* circleB);
+		////static void RigidCircle_RigidCircle(const float& delta, Body* bodyA, Circle* circleA, Body* bodyB, Circle* circleB);
+		static void RigidCircle_StaticCircle(Rigidbody* bodyA, Circle* circleA, const Staticbody* bodyB, const Circle* circleB);
 		/// circle line
-		////static void Circle_DynamLine();
-		////static void Circle_StaticLine(); // next
+		////static void RigidCircle_RigidLine();
+		////static void RigidCircle_StaticLine(); // next
 		/// circle box
-		////static void Circle_DynamBox();
-		////static void Circle_StaticBox();
+		////static void RigidCircle_RigidBox();
+		////static void RigidCircle_StaticBox();
 
 		/// line circle
-		////static void Line_DynamCircle();
-		////static void Line_StaticCircle();
+		////static void RigidLine_RigidCircle();
+		////static void RigidLine_StaticCircle();
 		/// line line
-		////static void Line_DynamLine();
-		////static void Line_StaticLine();
+		////static void RigidLine_RigidLine();
+		////static void RigidLine_StaticLine();
 		/// line box
-		////static void Line_DynamBox();
-		////static void Line_StaticBox();
+		////static void RigidLine_RigidBox();
+		////static void RigidLine_StaticBox();
 
 		/// box circle
-		////static void Box_DynamCircle();
-		////static void Box_StaticCircle();
+		////static void RigidBox_RigidCircle();
+		////static void RigidBox_StaticCircle();
 		/// box line
-		////static void Box_DynamLine();
-		////static void Box_StaticLine();
+		////static void RigidBox_RigidLine();
+		////static void RigidBox_StaticLine();
 		/// box box
-		////static void Box_DynamBox();
-		////static void Box_StaticBox();
+		////static void RigidBox_RigidBox();
+		////static void RigidBox_StaticBox();
 
 
 	};
 }
 
-#endif // !COLLISIONS_HPP
+#endif // !PHYSICS_COLLISIONS_HPP
