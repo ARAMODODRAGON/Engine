@@ -1,32 +1,35 @@
-#ifndef TEXTURE2D_HPP
-#define TEXTURE2D_HPP
+#ifndef RENDERING_TEXTURE2D_HPP
+#define RENDERING_TEXTURE2D_HPP
 #include "../Common.hpp"
 #include <glew.h>
 
-class Texture2D {
-private:
-	// texture ID
-	GLuint texID;
+namespace Rendering {
 
-	// image data
-	ubyte bytesPerPixel;
-	uint width, height;
+	class Texture2D {
+	private:
+		// texture ID
+		GLuint texID;
 
-public:
+		// image data
+		ubyte bytesPerPixel;
+		uint width, height;
 
-	Texture2D();
-	~Texture2D();
+	public:
 
-	// load image
-	void LoadImage(string filepath);
-	void UnloadImage();
+		Texture2D();
+		~Texture2D();
 
-	// binding
-	void BindImage();
+		// load image
+		void LoadImage(string filepath);
+		void UnloadImage();
 
-	// getter
-	GLuint GetTextureID() { return texID; }
-};
+		// binding
+		void BindImage();
 
+		// getter
+		GLuint GetTextureID() { return texID; }
+	};
 
-#endif // !TEXTURE2D_HPP
+}
+
+#endif // !RENDERING_TEXTURE2D_HPP

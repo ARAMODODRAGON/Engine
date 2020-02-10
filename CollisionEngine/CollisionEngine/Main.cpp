@@ -114,13 +114,13 @@ int main(int argc, char* argv[]) {
 				// draw circles
 				for (Physics::Circle* shape : circleList) {
 					Physics::Body* body = shape->GetBody();
-					Debug::DrawCircle(body->GetPosition(), shape->GetRadius());
+					Debug::DrawCircle(body->GetPosition(), shape->GetRadius(), Color::VIOLET);
 					//Debug::DrawBounds(body->GetBounds());
 				}
 				// draw lines
 				for (Physics::Line* shape : lineList) {
 					Physics::Body* body = shape->GetBody();
-					Debug::DrawLine(body->GetPosition() + shape->GetStart(), body->GetPosition() + shape->GetEnd());
+					Debug::DrawLine(body->GetPosition() + shape->GetStart(), body->GetPosition() + shape->GetEnd(), Color::VIOLET);
 					//Debug::DrawBounds(body->GetBounds());
 				}
 			}

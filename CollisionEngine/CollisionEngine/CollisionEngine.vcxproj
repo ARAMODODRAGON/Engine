@@ -138,6 +138,7 @@
     <ClCompile Include="Engine\Physics\Collisions.cpp" />
     <ClCompile Include="Engine\Physics\CollisionShapes\Line.cpp" />
     <ClCompile Include="Engine\Physics\PhysicsScene.cpp" />
+    <ClCompile Include="Engine\Rendering\Color.cpp" />
     <ClCompile Include="Engine\Rendering\Shader.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Engine\Rendering\Texture2D.cpp" />
@@ -160,6 +161,7 @@
     <ClInclude Include="Engine\Physics\CollisionShapes\Line.hpp" />
     <ClInclude Include="Engine\Physics\PhysicsScene.hpp" />
     <ClInclude Include="Engine\Physics\CollisionShapes\Shape.hpp" />
+    <ClInclude Include="Engine\Rendering\Color.hpp" />
     <ClInclude Include="Engine\Rendering\Shader.hpp" />
     <ClInclude Include="Engine\Rendering\Texture2D.hpp" />
   </ItemGroup>

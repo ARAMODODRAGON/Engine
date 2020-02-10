@@ -71,11 +71,11 @@ void Debug::Init() {
 
 void Debug::DrawShapes() {
 	shader.UseProgram();
-	glUniform4f(colorLoc, 0.0f, 1.0f, 0.0f, 1.0f); // green
 
 	glBindVertexArray(circleVAO);
 	for (CircleShape& circle : circleShapesList) {
 
+		glUniform4f(colorLoc, circle.color.r, circle.color.g, circle.color.b, circle.color.a);
 		glUniform2f(scalarLoc, circle.radius, circle.radius);
 		glUniform2f(offsetLoc, circle.position.x, circle.position.y);
 
@@ -88,6 +88,7 @@ void Debug::DrawShapes() {
 	glBindVertexArray(lineVAO);
 	for (LineShape& line : lineShapesList) {
 
+		glUniform4f(colorLoc, line.color.r, line.color.g, line.color.b, line.color.a);
 		glUniform2f(scalarLoc, line.direction.x, line.direction.y);
 		glUniform2f(offsetLoc, line.position.x, line.position.y);
 

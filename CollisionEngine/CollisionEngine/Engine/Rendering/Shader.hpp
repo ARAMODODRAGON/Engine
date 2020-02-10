@@ -1,36 +1,38 @@
-#ifndef SHADER_HPP
-#define SHADER_HPP
+#ifndef RENDERING_SHADER_HPP
+#define RENDERING_SHADER_HPP
 #include "../Common.hpp"
 #include <glew.h>
-#include <map>
 
-class Shader {
-	// shader program
-	GLuint programID;
+namespace Rendering {
 
-public:
+	class Shader {
+		// shader program
+		GLuint programID;
 
-	Shader();
-	~Shader();
+	public:
 
-
-	/// functions
-
-	void LoadShader(const string& vertpath, const string& fragpath);
-	void UnloadShader();
-
-	void UseProgram();
+		Shader();
+		~Shader();
 
 
-	/// getters
+		/// functions
 
-	GLuint GetProgramID() { return programID; }
+		void LoadShader(const string& vertpath, const string& fragpath);
+		void UnloadShader();
 
-private:
+		void UseProgram();
 
-	/// static functions
-	static string LoadSource(const string& filepath);
 
-};
+		/// getters
 
-#endif // !SHADER_HPP
+		GLuint GetProgramID() { return programID; }
+
+	private:
+
+		/// static functions
+		static string LoadSource(const string& filepath);
+
+	};
+}
+
+#endif // !RENDERING_SHADER_HPP
