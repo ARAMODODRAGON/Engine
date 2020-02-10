@@ -16,10 +16,11 @@ namespace Physics {
 		// the number of substeps that must be preformed
 		size_t substeps;
 		float timestep;
+		float waittime;
 
 	public:
 
-		PhysicsScene(uint substeps_, float timestep_);
+		PhysicsScene(uint substeps_, float timestep_, float waittime_);
 		~PhysicsScene();
 
 
@@ -28,6 +29,11 @@ namespace Physics {
 		void SetSubsteps(uint substeps_);
 		// @param timestep_: minimum is 0.001f
 		void SetTimestep(float timestep_);
+
+
+		/// getters
+
+		size_t GetSleepCount();
 
 
 		/// creating/destroying bodies
@@ -54,7 +60,7 @@ namespace Physics {
 		/// private functions
 
 		void DetermineRigidStaticCollision(Rigidbody* rbody, Shape* rShape, const Staticbody* sbody, const Shape* sShape);
-		void DetermineRigidRigidCollision(Rigidbody* rbody0, Shape* rShape0, Rigidbody* rbody1, Shape* rShape1);
+		void DetermineRigidRigidCollision(const float& delta, Rigidbody* rbody0, Shape* rShape0, Rigidbody* rbody1, Shape* rShape1);
 		
 	};
 

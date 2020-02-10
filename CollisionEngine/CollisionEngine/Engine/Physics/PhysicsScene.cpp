@@ -4,7 +4,8 @@
 
 namespace Physics {
 
-	PhysicsScene::PhysicsScene(uint substeps_, float timestep_) : substeps(0), timestep(0.0f) {
+	PhysicsScene::PhysicsScene(uint substeps_, float timestep_, float waittime_)
+		: substeps(0), timestep(0.0f), waittime(waittime_) {
 		SetSubsteps(substeps_);
 		SetTimestep(timestep_);
 	}
@@ -34,6 +35,15 @@ namespace Physics {
 	void PhysicsScene::SetTimestep(float timestep_) {
 		timestep = timestep_;
 		if (timestep <= 0.001f) timestep = 0.001f;
+	}
+
+	size_t PhysicsScene::GetSleepCount() {
+		size_t count = 0;
+
+		for (Rigidbody* rb : rigidList)
+			if (rb->sleepMode == SleepMode::Sleep) ++count;
+
+		return count;
 	}
 
 	Rigidbody* PhysicsScene::CreateRigidbody() {
@@ -86,10 +96,11 @@ namespace Physics {
 	void PhysicsScene::DoSubstep(const float& subdelta, const size_t& steps) {
 		// start looping through bodies
 		for (Rigidbody* rbody : rigidList) {
-			// skip if it doesnt have a shape or if simulate is false
-			if ((!rbody->simulated) || (rbody->shape == nullptr)) continue;
+			// skip if it doesnt have a shape or if simulate is false or if sleeping
+			if ((!rbody->simulated) || (rbody->shape == nullptr) || (rbody->sleepMode == SleepMode::Sleep)) continue;
 
-			for (size_t i = 0; i < steps; ++i) { // this is for each substep
+			// this is for each substep
+			for (size_t i = 0; i < steps; ++i) { 
 												 // update the bodies position and velocity
 				rbody->velocity += rbody->acceleration * subdelta;
 				rbody->position += rbody->velocity * subdelta;
@@ -104,7 +115,7 @@ namespace Physics {
 
 					// check if the bounds overlap
 					if (Bounds::Intersects(rbody->bounds, other->bounds))
-						DetermineRigidRigidCollision(rbody, rbody->shape, other, other->shape);
+						DetermineRigidRigidCollision(subdelta, rbody, rbody->shape, other, other->shape);
 				}
 
 				// check collisions against every staticbody
@@ -125,6 +136,7 @@ namespace Physics {
 				//		DetermineRigidKinematicCollision(rbody, rbody->shape, other, other->shape);
 				//}
 			}
+
 		}
 	}
 
@@ -141,16 +153,16 @@ namespace Physics {
 			case ShapeType::Circle:
 				Collisions::RigidCircle_StaticCircle(
 					rbody,
-					dynamic_cast<Circle*>(rShape),
+					static_cast<Circle*>(rShape),
 					sbody,
-					dynamic_cast<const Circle*>(sShape)
+					static_cast<const Circle*>(sShape)
 				); return;
 			case ShapeType::Line:
 				Collisions::RigidCircle_StaticLine(
 					rbody,
-					dynamic_cast<Circle*>(rShape),
+					static_cast<Circle*>(rShape),
 					sbody,
-					dynamic_cast<const Line*>(sShape)
+					static_cast<const Line*>(sShape)
 				); return;
 			default: return;
 			}
@@ -160,79 +172,29 @@ namespace Physics {
 	}
 
 	void PhysicsScene::DetermineRigidRigidCollision(
+		const float& delta, 
 		Rigidbody* rbody0,
 		Shape* rShape0,
 		Rigidbody* rbody1,
 		Shape* rShape1
 	) {
-		// TODO: add functionality
-	}
+		// determin what kind of colliders they have
+		switch (rShape0->GetShapeType()) {
+		case ShapeType::Circle:
+			switch (rShape1->GetShapeType()) {
+			case ShapeType::Circle:
+				Collisions::RigidCircle_RigidCircle(
+					delta,
+					rbody0,
+					static_cast<Circle*>(rShape0),
+					rbody1,
+					static_cast<Circle*>(rShape1)
+				); return;
+			default: return;
+			}
 
-	//void PhysicsScene::UpdatePhysics(const float& delta, Body* body, Bounds& bounds) {
-	//	if (body->type == BodyType::Dynamic) {
-	//		// update position and velocity
-	//		body->velocity += body->acceleration * delta;
-	//		body->position += body->velocity * delta;
-	//
-	//		// update bounds
-	//		bounds = body->GetBounds();
-	//	}
-	//}
-	//
-	//void PhysicsScene::CheckCollisions(const float& delta, Body* body, Bounds& bounds, Shape* shape) {
-	//	// dont check collisions if its static
-	//	if (body->type == BodyType::Static) return;
-	//
-	//	// loop through all bodies and check for collisions
-	//	for (Node* node : body_list) {
-	//		// skip self
-	//		if (body == node->body) continue;
-	//
-	//		// the two bounds overlap
-	//		if (Bounds::Intersects(bounds, node->bounds)) {
-	//			// now figure out what collision function to call
-	//			if (node->body->type == BodyType::Dynamic)
-	//				DetermineDynamCollision(body, body->shape, node->body, node->body->shape);
-	//			else
-	//				DetermineStaticCollision(body, body->shape, node->body, node->body->shape);
-	//		}
-	//	}
-	//
-	//}
-	//
-	//void PhysicsScene::DetermineStaticCollision(
-	//	Body* bodyA,
-	//	Shape* shapeA,
-	//	Body* bodyB,
-	//	Shape* shapeB
-	//) {
-	//	switch (shapeA->GetShapeType()) {
-	//		case ShapeType::Circle:
-	//
-	//			switch (shapeB->GetShapeType()) {
-	//				case ShapeType::Circle:
-	//					Collisions::RigidCircle_StaticCircle(
-	//						bodyA,
-	//						dynamic_cast<Circle*>(shapeA),
-	//						bodyB,
-	//						dynamic_cast<Circle*>(shapeB)
-	//					); return;
-	//				default: Debug::PrintError("Shape type not permitted"); return;
-	//			} break;
-	//
-	//		default: Debug::PrintError("Shape type not permitted"); return;
-	//	}
-	//}
-	//
-	//void PhysicsScene::DetermineDynamCollision(
-	//	Body* bodyA,
-	//	Shape* shapeA,
-	//	Body* bodyB,
-	//	Shape* shapeB
-	//) {
-	//	switch (shapeA->GetShapeType()) {
-	//		default: Debug::PrintError("Shape type not permitted"); return;
-	//	}
-	//}
+		default: return;
+		}
+	}
 
 }

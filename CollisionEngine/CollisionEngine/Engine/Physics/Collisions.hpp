@@ -12,16 +12,16 @@ namespace Physics {
 	class Collisions {
 
 		static Vector2 ClosestPointOnLine(float lx1, float ly1, float lx2, float ly2, float x0, float y0);
-		static Vector2 CalculateBounceVelocity(const Vector2& velocity, const Vector2& surfaceNorm, const float& bounceA, const float& bounceB);
+		static Vector2 CalculateBounceVelocity(const Vector2& velocity, const Vector2& surfaceNorm, const float& bounce);
 
 	public:
 
 		/// circle circle
-		////static void RigidCircle_RigidCircle(const float& delta, Body* bodyA, Circle* circleA, Body* bodyB, Circle* circleB);
-		static void RigidCircle_StaticCircle(Rigidbody* bodyA, Circle* shapeA, const Staticbody* bodyB, const Circle* shapeB);
+		static void RigidCircle_RigidCircle(const float& delta, Rigidbody* bodyA, Circle* circleA, Rigidbody* bodyB, Circle* circleB);
+		static void RigidCircle_StaticCircle(Rigidbody* bodyA, Circle* circleA, const Staticbody* bodyB, const Circle* circleB);
 		/// circle line
 		////static void RigidCircle_RigidLine();
-		static void RigidCircle_StaticLine(Rigidbody* bodyA, Circle* shapeA, const Staticbody* bodyB, const Line* shapeB); // next
+		static void RigidCircle_StaticLine(Rigidbody* bodyA, Circle* circle, const Staticbody* bodyB, const Line* line); // next
 		/// circle box
 		////static void RigidCircle_RigidBox();
 		////static void RigidCircle_StaticBox();

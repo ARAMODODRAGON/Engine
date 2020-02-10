@@ -6,6 +6,7 @@
 #include "Engine/Physics/CollisionShapes/Circle.hpp"
 #include "Engine/Math/FMath.hpp"
 #include "Engine/Physics/CollisionShapes/Line.hpp"
+#include <random>
 
 list<Physics::Circle*> circleList;
 Physics::Circle* CreateCircle() {
@@ -27,126 +28,108 @@ int main(int argc, char* argv[]) {
 	window->OnCreate("Collision Engine Simplified", 800, 800);
 	Timer* timer = new Timer();
 	timer->Start();
+	srand(SDL_GetTicks());
 	Debug::Init();
 
 	// physics
-	Physics::PhysicsScene* scene = new Physics::PhysicsScene(20, 0.005f);
+	Physics::PhysicsScene* scene = new Physics::PhysicsScene(4, 0.005f, 0.2f);
 
 
-	Physics::Rigidbody* body = scene->CreateRigidbody();
-	Physics::Circle* circle = CreateCircle();
+	// create static shapes
 	{
-		body->SetAcceleration(Vector2(0.0f, -1.1f));
-		body->SetBounce(0.9f);
+		Physics::Staticbody* body = nullptr;
+		Physics::Line* line = nullptr;
+		Physics::Circle* circle = nullptr;
 
-		circle->SetRadius(0.08f);
-		body->SetShape(circle);
-	}
+		// funnel left line
+		body = scene->CreateStaticbody();
+		line = CreateLine();
+		body->SetShape(line);
+		line->SetStart(Vector2(-1.0f, 1.0f));
+		line->SetEnd(Vector2(0.0f, -1.0f));
 
-	{ // creating shapes
-		Physics::Staticbody* sbody = nullptr;
-		Physics::Circle* scircle = nullptr;
-		Physics::Line* sline = nullptr;
-
-		// right circle
-		//sbody = scene->CreateStaticbody();
-		//scircle = CreateCircle();
-		//sbody->SetShape(scircle);
-		//sbody->SetPosition(Vector2(0.39f, -0.3f));
-		//sbody->SetBounce(0.0f);
-		//scircle->SetRadius(0.3f);
-
-		// left circle
-		sbody = scene->CreateStaticbody();
-		scircle = CreateCircle();
-		sbody->SetShape(scircle);
-		sbody->SetPosition(Vector2(-0.8f, 0.0f));
-		sbody->SetBounce(0.0f);
-		scircle->SetRadius(0.2f);
+		// funnel right line
+		body = scene->CreateStaticbody();
+		line = CreateLine();
+		body->SetShape(line);
+		line->SetStart(Vector2(1.0f, 1.0f));
+		line->SetEnd(Vector2(0.0f, -1.0f));
 
 		// center circle
-		//sbody = scene->CreateStaticbody();
-		//scircle = CreateCircle();
-		//sbody->SetShape(scircle);
-		//sbody->SetPosition(Vector2(-0.0f, -0.8f));
-		//sbody->SetBounce(0.0f);
-		//scircle->SetRadius(0.3f);
-
-		// line across
-		sbody = scene->CreateStaticbody();
-		sline = CreateLine();
-		sbody->SetShape(sline);
-		sline->SetStart(Vector2(1.0f, 0.4f));
-		sline->SetEnd(Vector2(-0.05f, -0.0f));
-		sbody->SetBounce(0.0f);
-		
-		// line ceiling
-		sbody = scene->CreateStaticbody();
-		sline = CreateLine();
-		sbody->SetShape(sline);
-		sline->SetStart(Vector2(-0.05f, 0.0f));
-		sline->SetEnd(Vector2(1.0f, -0.53f));
-		sbody->SetBounce(0.0f);
-
-		// line across inverted
-		sbody = scene->CreateStaticbody();
-		sline = CreateLine();
-		sbody->SetShape(sline);
-		sline->SetStart(Vector2(-1.0f, -0.3f));
-		sline->SetEnd(Vector2(1.0f, -0.8f));
-		sbody->SetBounce(0.0f);
-
+		body = scene->CreateStaticbody();
+		circle = CreateCircle();
+		body->SetShape(circle);
+		body->SetPosition(Vector2(0.0f, -0.2f));
+		circle->SetRadius(0.1f);
 	}
 
-	for (size_t i = 0; i < 1; ++i) {
+	float timer0 = 0.0f;
+	float timer1 = 0.0f;
+	size_t rigidbodycount = 0;
+	while (timer0 < 30.0f) {
+		timer->UpdateGameTicks();
+		float delta = timer->GetDeltaTimer();
+		timer0 += delta;
 
-		// reset ball position
-		body->SetPosition(Vector2(0.5f, 1.1f));
-		body->SetVelocity(Vector2::ZERO);
-
-		float timer0 = 0.0f;
-		while (timer0 < 9.5f) {
-			timer->UpdateGameTicks();
-			float delta = timer->GetDeltaTimer();
-			timer0 += delta;
-
-			{
-				// draw circles
-				for (Physics::Circle* shape : circleList) {
-					Physics::Body* body = shape->GetBody();
-					Debug::DrawCircle(body->GetPosition(), shape->GetRadius(), Color::VIOLET);
-					//Debug::DrawBounds(body->GetBounds());
-				}
-				// draw lines
-				for (Physics::Line* shape : lineList) {
-					Physics::Body* body = shape->GetBody();
-					Debug::DrawLine(body->GetPosition() + shape->GetStart(), body->GetPosition() + shape->GetEnd(), Color::VIOLET);
-					//Debug::DrawBounds(body->GetBounds());
-				}
+		{
+			// draw circles
+			for (Physics::Circle* shape : circleList) {
+				Physics::Body* body = shape->GetBody();
+				Debug::DrawCircle(body->GetPosition(), shape->GetRadius(), Color::GREEN);
+				//Debug::DrawBounds(body->GetBounds());
 			}
-
-			//printf("pos(x:%f, y:%f)\n", bodyA->GetPosition().x, bodyA->GetPosition().y);
-
-			scene->DoStep(delta);
-
-			// clear the screen
-			glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-			Debug::DrawShapes();
-
-
-			// swap buffers
-			SDL_GL_SwapWindow(window->GetWindow());
-			// wait for the end of the frame
-			SDL_Delay(timer->GetSleepTime(120));
+			// draw lines
+			for (Physics::Line* shape : lineList) {
+				Physics::Body* body = shape->GetBody();
+				Debug::DrawLine(body->GetPosition() + shape->GetStart(), body->GetPosition() + shape->GetEnd(), Color::GREEN);
+				//Debug::DrawBounds(body->GetBounds());
+			}
 		}
+
+		// spawning bodies
+		if (rigidbodycount < 36)
+			timer1 += delta;
+		if (timer1 > 0.6f) {
+			timer1 -= 0.6f;
+
+			// spawn
+			Physics::Rigidbody* body = scene->CreateRigidbody();
+			Physics::Circle* circle = CreateCircle();
+			body->SetShape(circle);
+
+			circle->SetRadius(0.06f);
+			body->SetBounce(0.9f);
+			body->SetPosition(Vector2(static_cast<float>(rand() % 100) / 200.0f - 0.25f, 1.0f));
+			body->SetAcceleration(Vector2(0.0f, -1.1f));
+
+			++rigidbodycount;
+		}
+
+		scene->DoStep(delta);
+
+		printf("Sleep Count: %i || Framerate: %f\n", scene->GetSleepCount(), 1.0f / delta);
+
+		// clear the screen
+		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		Debug::DrawShapes();
+
+
+		// swap buffers
+		SDL_GL_SwapWindow(window->GetWindow());
+		// wait for the end of the frame
+		SDL_Delay(timer->GetSleepTime(120));
 	}
+
 
 	Debug::Exit();
 	for (Physics::Circle* circle : circleList)
 		delete circle;
 	circleList.clear();
+	for (Physics::Line* line : lineList)
+		delete line;
+	lineList.clear();
 	delete window; window = nullptr;
 	delete timer; timer = nullptr;
 	return 0;

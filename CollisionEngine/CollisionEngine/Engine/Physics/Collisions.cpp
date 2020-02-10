@@ -44,22 +44,53 @@ namespace Physics {
 	Vector2 Collisions::CalculateBounceVelocity(
 		const Vector2& velocity,
 		const Vector2& surfaceNorm,
-		const float& bounceA,
-		const float& bounceB
+		const float& bounceA
 	) {
-		return VMath::Reflect(velocity, VMath::Normalized(surfaceNorm) * FMath::Halfway(bounceA, 1.0f - bounceB));
+		return VMath::Reflect(velocity, VMath::Normalized(surfaceNorm) * bounceA);
 	}
 
 
+	void Collisions::RigidCircle_RigidCircle(
+		const float& delta, 
+		Rigidbody* bodyA, 
+		Circle* circleA, 
+		Rigidbody* bodyB, 
+		Circle* circleB
+	) { 
+		// distance between the two bodies (points to A)
+		Vector2 normal = bodyA->position - bodyB->position;
+		float minDist = circleA->radius + circleB->radius;
+
+		if (normal.SqrLength() < minDist * minDist) {
+			// points to A
+			normal = VMath::Normalized(normal) * (minDist - normal.Length());
+
+			// push
+			bodyA->position += normal;
+			bodyB->position -= normal;
+
+			// bounce
+			bodyA->velocity = CalculateBounceVelocity(bodyA->velocity, normal, bodyA->bounce);
+			bodyB->velocity = CalculateBounceVelocity(bodyB->velocity, -normal, bodyB->bounce);
+
+			
+			// update bounds
+			bodyA->UpdateBounds();
+			bodyB->UpdateBounds();
+
+
+		}
+	}
+
 	void Collisions::RigidCircle_StaticCircle(
 		Rigidbody* bodyA,
-		Circle* shapeA,
+		Circle* circleA,
 		const Staticbody* bodyB,
-		const Circle* shapeB
+		const Circle* circleB
 	) {
 		// distance between the two bodies (points to A)
 		Vector2 normal = bodyA->position - bodyB->position;
-		float minDist = shapeA->radius + shapeB->radius;
+		float minDist = circleA->radius + circleB->radius;
 
 		if (normal.SqrLength() < minDist * minDist) {
 			// points to A
@@ -69,38 +100,43 @@ namespace Physics {
 			bodyA->position += normal;
 
 			// bounce
-			bodyA->velocity = CalculateBounceVelocity(bodyA->velocity, normal, bodyA->bounce, bodyB->bounce);
+			bodyA->velocity = CalculateBounceVelocity(bodyA->velocity, normal, bodyA->bounce);
+
+			// update bounds and wake up
+			bodyA->UpdateBounds();
 
 		}
 	}
 
 	void Collisions::RigidCircle_StaticLine(
 		Rigidbody* bodyA,
-		Circle* shapeA,
+		Circle* circle,
 		const Staticbody* bodyB,
-		const Line* shapeB
+		const Line* line
 	) {
 		Vector2 point = ClosestPointOnLine(
-			shapeB->end.x + bodyB->position.x,
-			shapeB->end.y + bodyB->position.y,
-			shapeB->start.x + bodyB->position.x,
-			shapeB->start.y + bodyB->position.y,
+			line->end.x + bodyB->position.x,
+			line->end.y + bodyB->position.y,
+			line->start.x + bodyB->position.x,
+			line->start.y + bodyB->position.y,
 			bodyA->position.x, bodyA->position.y
 		);
 
 		// distance between the two bodies (points to A)
 		Vector2 normal = bodyA->position - point;
 
-		if (normal.SqrLength() < shapeA->radius * shapeA->radius) {
+		if (normal.SqrLength() < circle->radius * circle->radius) {
 			// points to A
-			normal = VMath::Normalized(normal) * (shapeA->radius - normal.Length());
+			normal = VMath::Normalized(normal) * (circle->radius - normal.Length());
 
 			// push
 			bodyA->position += normal;
 
 			// bounce
-			bodyA->velocity = CalculateBounceVelocity(bodyA->velocity, normal, bodyA->bounce, bodyB->bounce);
-			//bodyA->velocity = Vector2::Reflect(bodyA->velocity, Vector2::Normalized(normal) * Mathf::Halfway(bodyA->bounce, 1.0f - bodyB->bounce));
+			bodyA->velocity = CalculateBounceVelocity(bodyA->velocity, normal, bodyA->bounce);
+
+			// update bounds
+			bodyA->UpdateBounds();
 
 		}
 

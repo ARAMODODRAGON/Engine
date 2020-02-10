@@ -31,6 +31,8 @@ namespace Math {
 
 		Vector2 operator-() const;
 
+		bool operator==(const Vector2& other) const;
+		bool operator!=(const Vector2& other) const;
 
 		/// static constants
 
