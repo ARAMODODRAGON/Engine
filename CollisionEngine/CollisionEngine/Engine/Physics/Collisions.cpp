@@ -24,21 +24,27 @@ namespace Physics {
 			cy = y0;
 		}
 
-		if (cx < lx1 && cx < lx2 && cy < ly1 && cy < ly2) {
-			cx = (lx1 < lx2 ? lx1 : lx2);
-			cy = (ly1 < ly2 ? ly1 : ly2);
-		} else if (cx > lx1 && cx > lx2 && cy > ly1 && cy > ly2) {
-			cx = (lx1 > lx2 ? lx1 : lx2);
-			cy = (ly1 > ly2 ? ly1 : ly2);
+		if (lx1 < lx2 && cx < lx1) {
+			cx = lx1; 
+			cy = ly1;
+		} else if (lx2 < lx1 && cx < lx2) {
+			cx = lx2;
+			cy - ly2;
+		} else if (ly1 < ly2 && cy < ly1) {
+			cx = lx1; 
+			cy = ly1;
+		} else if (ly2 < ly1 && cy < ly2) {
+			cx = lx2;
+			cy - ly2;
 		}
 
 		return Vector2(cx, cy);
 	}
 
 	Vector2 Collisions::CalculateBounceVelocity(
-		const Vector2& velocity, 
-		const Vector2& surfaceNorm, 
-		const float& bounceA, 
+		const Vector2& velocity,
+		const Vector2& surfaceNorm,
+		const float& bounceA,
 		const float& bounceB
 	) {
 		return VMath::Reflect(velocity, VMath::Normalized(surfaceNorm) * FMath::Halfway(bounceA, 1.0f - bounceB));

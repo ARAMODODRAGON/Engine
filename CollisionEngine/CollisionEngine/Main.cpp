@@ -84,7 +84,7 @@ int main(int argc, char* argv[]) {
 		sbody = scene->CreateStaticbody();
 		sline = CreateLine();
 		sbody->SetShape(sline);
-		sline->SetStart(Vector2(-0.05f, -0.0f));
+		sline->SetStart(Vector2(-0.05f, 0.0f));
 		sline->SetEnd(Vector2(1.0f, -0.53f));
 		sbody->SetBounce(0.0f);
 
@@ -98,7 +98,7 @@ int main(int argc, char* argv[]) {
 
 	}
 
-	for (size_t i = 0; i < 3; ++i) {
+	for (size_t i = 0; i < 1; ++i) {
 
 		// reset ball position
 		body->SetPosition(Vector2(0.5f, 1.1f));
@@ -130,7 +130,7 @@ int main(int argc, char* argv[]) {
 			scene->DoStep(delta);
 
 			// clear the screen
-			glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
+			glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 			Debug::DrawShapes();

@@ -9,7 +9,6 @@ namespace Physics {
 		bounds.min.y = (start.y < end.y ? start.y : end.y) + pos.y;
 		bounds.max.x = (start.x > end.x ? start.x : end.x) + pos.x;
 		bounds.max.y = (start.y > end.y ? start.y : end.y) + pos.y;
-		printf("%f %f pos", bounds.max.x, bounds.max.y);
 		return bounds;
 	}
 
