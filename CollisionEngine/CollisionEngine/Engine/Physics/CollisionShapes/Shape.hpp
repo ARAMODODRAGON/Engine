@@ -5,7 +5,7 @@
 
 namespace Physics {
 
-	enum class ShapeType : ubyte { None, Circle, Line, Box, };
+	enum class ShapeType : ubyte { None, Circle, Line, Box, Capsule };
 
 	class Body;
 

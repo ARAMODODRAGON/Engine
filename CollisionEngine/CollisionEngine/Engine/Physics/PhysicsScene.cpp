@@ -86,7 +86,7 @@ namespace Physics {
 		// constants
 		const size_t _substeps = substeps; // this is so the substeps isnt modified pert way through a physics update
 		const size_t totalsteps = static_cast<size_t>(delta / timestep); // this is the number of steps that must be completed to match the framerate
-		const float subdelta = delta / _substeps / totalsteps;
+		const float subdelta = timestep / _substeps;
 
 		// step as many times as required
 		for (size_t i = 0; i < totalsteps; i++)
@@ -100,8 +100,8 @@ namespace Physics {
 			if ((!rbody->simulated) || (rbody->shape == nullptr) || (rbody->sleepMode == SleepMode::Sleep)) continue;
 
 			// this is for each substep
-			for (size_t i = 0; i < steps; ++i) { 
-												 // update the bodies position and velocity
+			for (size_t i = 0; i < steps; ++i) {
+				// update the bodies position and velocity
 				rbody->velocity += rbody->acceleration * subdelta;
 				rbody->position += rbody->velocity * subdelta;
 				rbody->UpdateBounds();
@@ -149,6 +149,7 @@ namespace Physics {
 		// determin what kind of colliders they have
 		switch (rShape->GetShapeType()) {
 		case ShapeType::Circle:
+
 			switch (sShape->GetShapeType()) {
 			case ShapeType::Circle:
 				Collisions::RigidCircle_StaticCircle(
@@ -172,7 +173,7 @@ namespace Physics {
 	}
 
 	void PhysicsScene::DetermineRigidRigidCollision(
-		const float& delta, 
+		const float& delta,
 		Rigidbody* rbody0,
 		Shape* rShape0,
 		Rigidbody* rbody1,
@@ -181,6 +182,7 @@ namespace Physics {
 		// determin what kind of colliders they have
 		switch (rShape0->GetShapeType()) {
 		case ShapeType::Circle:
+
 			switch (rShape1->GetShapeType()) {
 			case ShapeType::Circle:
 				Collisions::RigidCircle_RigidCircle(
