@@ -5,6 +5,11 @@ namespace Math {
 
 	float Sqrt(const float& f);
 	float Abs(const float& f);
+	float Clamp(float f, const float& min, const float& max);
+	static float Lerp(const float& a, const float& b, const float& t);
+	static bool NearlyZero(const float& f, const float& percision = 0.01f);
+	static bool NearlyEqual(const float& a, const float& b, const float& percision = 0.01f);
+	static float Halfway(const float& a, const float& b);
 
 	struct float2 {
 		float x, y;

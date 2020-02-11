@@ -1,9 +1,14 @@
+#include <SDL.h>
 #include "Engine/common.hpp"
+#include "Engine/Engine.hpp"
 
+int main(int argc, char* argv[]) {
 
-int main() {
+	Engine::GetSingleton()->Init();
 
-	PRINT("hello world");
+	Engine::GetSingleton()->Run();
+
+	Engine::GetSingleton()->Destroy();
 
 	return 0;
 }

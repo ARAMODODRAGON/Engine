@@ -11,6 +11,27 @@ namespace Math {
 		return (f < 0 ? -f : f);
 	}
 
+	float Clamp(float f, const float& min, const float& max) {
+		if (f < min) f = min; else if (f > max) f = max;
+		return f;
+	}
+
+	float Lerp(const float& a, const float& b, const float& t) {
+		return (b - a) * t + a;
+	}
+
+	bool NearlyZero(const float& value, const float& percision) {
+		return Abs(value) < percision;
+	}
+
+	bool NearlyEqual(const float& a, const float& b, const float& percision) {
+		return Abs(b - a) < percision;
+	}
+
+	float Halfway(const float& a, const float& b) {
+		return (a + b) / 2.0f;
+	}
+
 
 	float Length(const float3& f) {
 		return sqrtf(f.x * f.x + f.y * f.y + f.z * f.z);

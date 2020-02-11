@@ -69,7 +69,9 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IncludePath>C:\GameDev\SDL\include;C:\GameDev\OpenGL\include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -79,6 +81,8 @@
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
+      <AdditionalLibraryDirectories>C:\GameDev\OpenGL\lib;C:\GameDev\SDL\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2.lib;SDL2_image.lib;SDL2main.lib;SDL2test.lib;glew32.lib;glew32s.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -124,21 +128,42 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Engine\common.hpp" />
+    <ClInclude Include="Engine\Engine.hpp" />
+    <ClInclude Include="Engine\Graphics\Color.hpp" />
+    <ClInclude Include="Engine\Graphics\Shader.hpp" />
+    <ClInclude Include="Engine\Graphics\Texture2D.hpp" />
+    <ClInclude Include="Engine\Graphics\Window.hpp" />
     <ClInclude Include="Engine\Math\AABB.hpp" />
     <ClInclude Include="Engine\Math\FloatVector.hpp" />
     <ClInclude Include="Engine\Physics\Bodies.hpp" />
     <ClInclude Include="Engine\Physics\Bodies2D.hpp" />
     <ClInclude Include="Engine\Physics\PhysicsScene.hpp" />
+    <ClInclude Include="Engine\Physics\PhysicsScene2D.hpp" />
     <ClInclude Include="Engine\Physics\Shapes.hpp" />
     <ClInclude Include="Engine\Physics\Shapes2D.hpp" />
+    <ClInclude Include="Engine\Utility\DebugDraw.hpp" />
+    <ClInclude Include="Engine\Utility\Timer.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Engine\Engine.cpp" />
+    <ClCompile Include="Engine\Graphics\Color.cpp" />
+    <ClCompile Include="Engine\Graphics\Shader.cpp" />
+    <ClCompile Include="Engine\Graphics\Texture2D.cpp" />
+    <ClCompile Include="Engine\Graphics\Window.cpp" />
     <ClCompile Include="Engine\Math\AABB.cpp" />
     <ClCompile Include="Engine\Math\FloatVector.cpp" />
+    <ClCompile Include="Engine\Physics\Bodies2D.cpp" />
     <ClCompile Include="Engine\Physics\PhysicsScene.cpp" />
+    <ClCompile Include="Engine\Physics\PhysicsScene2D.cpp" />
     <ClCompile Include="Engine\Physics\Shapes.cpp" />
     <ClCompile Include="Engine\Physics\Shapes2D.cpp" />
+    <ClCompile Include="Engine\Utility\DebugDraw.cpp" />
+    <ClCompile Include="Engine\Utility\Timer.cpp" />
     <ClCompile Include="Main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Engine\Utility\DebugDrawShader\LineShader.frag" />
+    <None Include="Engine\Utility\DebugDrawShader\LineShader.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
