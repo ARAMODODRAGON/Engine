@@ -30,6 +30,14 @@ namespace Math {
 	float2& operator*=(float2& lhs, const float& scalar);
 	float2& operator/=(float2& lhs, const float& divisor);
 
+	float2 operator-(const float2& f);
+
+	float Length(const float2& f);
+	float SqrLength(const float2& f);
+	float2 Normalize(const float2& f);
+	float Dot(const float2& f0, const float2& f1);
+	float2 Relfect(const float2& direction, float2 normal);
+
 	struct float3 {
 		float x, y, z;
 

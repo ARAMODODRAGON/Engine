@@ -9,13 +9,14 @@ namespace Physics {
 
 	class PhysicsScene2D {
 		SINGLETON_DECLERATION(PhysicsScene2D)
-			: timestep(0.0f), substeps(1) { }
+			: timestep(0.0f), substeps(1), totaldelta(0.0f) { }
 
 		std::list<Rigidbody2D*> rigidbodyList;
 		std::list<Staticbody2D*> staticbodyList;
 
 		float timestep;
 		size_t substeps;
+		float totaldelta;
 
 	public:
 
@@ -46,6 +47,8 @@ namespace Physics {
 
 		float GetTimestep() { return timestep; }
 		size_t GetSubsteps() { return substeps; }
+		size_t GetRigidbodyCount() { return rigidbodyList.size(); }
+		size_t GetStaticbodyCount() { return staticbodyList.size(); }
 
 		/// events
 
@@ -55,7 +58,7 @@ namespace Physics {
 
 		void DoSubsteps(const float& fixedDelta, const size_t& substeps);
 		void DetermineRigidStaticCollision(Rigidbody2D* body0, const Staticbody2D* body1);
-		void DetermineRigidRigidCollision(Rigidbody2D* body0, Rigidbody2D* body1);
+		void DetermineRigidRigidCollision(Rigidbody2D* body0, Rigidbody2D* body1, const float& delta);
 	};
 
 }

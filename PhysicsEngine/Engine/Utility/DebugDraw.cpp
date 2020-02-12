@@ -41,7 +41,7 @@ namespace Utility {
 		glDeleteBuffers(1, &lineVBO);
 	}
 
-	void DebugDraw::DrawShapes() { 
+	void DebugDraw::DrawShapes() {
 		lineShader.UseProgram();
 
 		glBindVertexArray(lineVAO);
@@ -60,24 +60,40 @@ namespace Utility {
 		glBindVertexArray(0);
 	}
 
-	void DebugDraw::DrawCircle(Math::float2 position, float radius, Graphics::Color color) { 
+	//	0.0f, -1.0f
+	//	0.5f, -0.866f
+	//	0.866f, -0.5f
+	//	1.0f, 0.0f
+	//	0.866f, 0.5f
+	//	0.5f, 0.866f
+	//	0.0f, 1.0f
+	//	-0.5f, 0.866f
+	//	-0.866f, 0.5f
+	//	-1.0f, 0.0f
+	//	-0.866f, -0.5f
+	//	-0.5f, -0.866f
+	
+	void DebugDraw::DrawCircle(Math::float2 position, float radius, Graphics::Color color) {
 		// draw 13 lines
-		DrawLine(Math::float2(0.0f, -1.0f), Math::float2(0.5f, -0.866f), color);
-		DrawLine(Math::float2(0.5f, -0.866f), Math::float2(0.866f, -0.5f), color);
-		DrawLine(Math::float2(0.866f, -0.5f), Math::float2(0.5f, -0.866f), color);
-		DrawLine(Math::float2(0.0f, -1.0f), Math::float2(1.0f, 0.0f), color);
-		DrawLine(Math::float2(1.0f, 0.0f), Math::float2(0.866f, 0.5f), color);
-		DrawLine(Math::float2(0.866f, 0.5f), Math::float2(0.5f, 0.866f), color);
-		DrawLine(Math::float2(0.5f, 0.866f), Math::float2(0.0f, 1.0f), color);
-		DrawLine(Math::float2(0.0f, 1.0f), Math::float2(-0.5f, 0.866f), color);
-		DrawLine(Math::float2(-0.5f, 0.866f), Math::float2(-0.866f, 0.5f), color);
-		DrawLine(Math::float2(-0.866f, 0.5f), Math::float2(-1.0f, 0.0f), color);
-		DrawLine(Math::float2(-1.0f, 0.0f), Math::float2(-0.866f, -0.5f), color);
-		DrawLine(Math::float2(-0.866f, -0.5f), Math::float2(-0.5f, -0.866f), color);
-		DrawLine(Math::float2(-0.5f, -0.866f), Math::float2(0.0f, -1.0f), color);
+		DrawLine(Math::float2(0.0f, -1.0f) * radius + position, Math::float2(0.5f, -0.866f) * radius + position, color);
+		DrawLine(Math::float2(0.5f, -0.866f) * radius + position, Math::float2(0.866f, -0.5f) * radius + position, color);
+		DrawLine(Math::float2(0.866f, -0.5f) * radius + position, Math::float2(1.0f, 0.0f) * radius + position, color);
+		
+		DrawLine(Math::float2(1.0f, 0.0f) * radius + position, Math::float2(0.866f, 0.5f) * radius + position, color);
+		DrawLine(Math::float2(0.866f, 0.5f) * radius + position, Math::float2(0.5f, 0.866f) * radius + position, color);
+		DrawLine(Math::float2(0.5f, 0.866f) * radius + position, Math::float2(0.0f, 1.0f) * radius + position, color);
+		
+		DrawLine(Math::float2(0.0f, 1.0f) * radius + position, Math::float2(-0.5f, 0.866f) * radius + position, color);
+		DrawLine(Math::float2(-0.5f, 0.866f) * radius + position, Math::float2(-0.866f, 0.5f) * radius + position, color);
+		DrawLine(Math::float2(-0.866f, 0.5f) * radius + position, Math::float2(-1.0f, 0.0f) * radius + position, color);
+		
+		DrawLine(Math::float2(-1.0f, 0.0f) * radius + position, Math::float2(-0.866f, -0.5f) * radius + position, color);
+		DrawLine(Math::float2(-0.866f, -0.5f) * radius + position, Math::float2(-0.5f, -0.866f) * radius + position, color);
+		DrawLine(Math::float2(-0.5f, -0.866f) * radius + position, Math::float2(0.0f, -1.0f) * radius + position, color);
+		
 	}
 
-	void DebugDraw::DrawLine(Math::float2 start, Math::float2 end, Graphics::Color color) { 
+	void DebugDraw::DrawLine(Math::float2 start, Math::float2 end, Graphics::Color color) {
 		singleton->drawRayList.push_back(DrawRay(start, end, color));
 	}
 

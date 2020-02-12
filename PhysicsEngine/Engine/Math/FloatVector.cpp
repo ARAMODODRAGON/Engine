@@ -6,50 +6,58 @@ namespace Math {
 	float Sqrt(const float& f) {
 		return sqrtf(f);
 	}
-
 	float Abs(const float& f) {
 		return (f < 0 ? -f : f);
 	}
-
 	float Clamp(float f, const float& min, const float& max) {
 		if (f < min) f = min; else if (f > max) f = max;
 		return f;
 	}
-
 	float Lerp(const float& a, const float& b, const float& t) {
 		return (b - a) * t + a;
 	}
-
 	bool NearlyZero(const float& value, const float& percision) {
 		return Abs(value) < percision;
 	}
-
 	bool NearlyEqual(const float& a, const float& b, const float& percision) {
 		return Abs(b - a) < percision;
 	}
-
 	float Halfway(const float& a, const float& b) {
 		return (a + b) / 2.0f;
+	}
+
+
+	float Length(const float2& f) {
+		return sqrtf(f.x * f.x + f.y * f.y);
+	}
+	float SqrLength(const float2& f) {
+		return f.x * f.x + f.y * f.y;
+	}
+	float2 Normalize(const float2& f) {
+		float len = sqrtf(f.x * f.x + f.y * f.y);
+		return float2(f.x / len, f.y / len);
+	}
+	float Dot(const float2& f0, const float2& f1) {
+		return f0.x * f1.x + f0.y * f1.y;
+	}
+	float2 Relfect(const float2& direction, float2 normal) {
+		return direction + normal * Dot(-direction, normal) * 2.0f;
 	}
 
 
 	float Length(const float3& f) {
 		return sqrtf(f.x * f.x + f.y * f.y + f.z * f.z);
 	}
-
 	float SqrLength(const float3& f) {
 		return f.x * f.x + f.y * f.y + f.z * f.z;
 	}
-
 	float3 Normalize(const float3& f) {
 		float len = sqrtf(f.x * f.x + f.y * f.y + f.z * f.z);
 		return float3(f.x / len, f.y / len, f.z / len);
 	}
-
 	float Dot(const float3& f0, const float3& f1) {
 		return f0.x * f1.x + f0.y * f1.y + f0.z * f1.z;
 	}
-
 	float3 Relfect(const float3& direction, float3 normal) {
 		return direction + normal * Dot(-direction, normal) * 2.0f;
 	}
@@ -92,8 +100,9 @@ namespace Math {
 		lhs.y /= divisor;
 		return lhs;
 	}
-
-
+	float2 operator-(const float2& f) {
+		return float2(-f.x, -f.y);
+	}
 	float3 operator+(const float3& lhs, const float3& rhs) {
 		return float3(lhs.x + rhs.x, lhs.y + rhs.y, lhs.z + rhs.z);
 	}

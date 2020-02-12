@@ -19,6 +19,7 @@ public:
 	float GetDeltaTimer() const;
 	unsigned int GetSleepTime(const uint fps_);
 	float GetCurrentTicks();
+	void AdjustCurrentTime(uint timeStamp);
 
 public:
 	// delete copy and move contructors/operators

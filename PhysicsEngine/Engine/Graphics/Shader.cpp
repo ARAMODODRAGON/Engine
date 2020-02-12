@@ -17,8 +17,8 @@ namespace Graphics {
 		string vertsourcestring = LoadSource(vertpath);
 		const char* vertsource = vertsourcestring.c_str();
 
-		PRINT("Loaded vertex: \n");
-		PRINT(vertsource);
+		//PRINT("Loaded vertex: \n");
+		//PRINT(vertsource);
 
 		// create vertex shader
 		GLuint vertID = glCreateShader(GL_VERTEX_SHADER);
@@ -44,8 +44,8 @@ namespace Graphics {
 		string fragsourcestring = LoadSource(fragpath);
 		const char* fragsource = fragsourcestring.c_str();
 
-		PRINT("Loaded fragment: \n");
-		PRINT(fragsource);
+		//PRINT("Loaded fragment: \n");
+		//PRINT(fragsource);
 
 		// create vertex shader
 		GLuint fragID = glCreateShader(GL_FRAGMENT_SHADER);

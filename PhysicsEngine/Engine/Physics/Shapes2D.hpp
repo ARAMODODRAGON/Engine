@@ -2,16 +2,20 @@
 #define PHYSICS_SHAPES2D_HPP
 #include "../common.hpp"
 #include "../Math/FloatVector.hpp"
-#include "../Math/AABB.hpp"
 
 namespace Physics {
 	using Math::float2;
-	using Math::AABB2D;
+	class Body;
 
 	enum class ShapeType2D : ubyte { None, Circle, Line, Capsule, Box, AABox };
 
 	struct Shape2D {
+		friend class Rigidbody2D;
+		friend class Staticbody2D;
 		virtual ShapeType2D GetShapeType2D() = 0;
+		Body* GetBody() { return body; }
+	private:
+		Body* body;
 	};
 
 	struct Circle2D : public Shape2D {
@@ -42,10 +46,10 @@ namespace Physics {
 	};
 
 	struct Box2D : public Shape2D {
-		float2 topLeft = float2(-0.5f, 0.5f);
-		float2 topRight = float2(0.5f, 0.5f);
-		float2 bottomLeft = float2(-0.5f, -0.5f);
-		float2 bottomRight = float2(0.5f, -0.5f);
+		float2 topLeft;
+		float2 topRight;
+		float2 bottomLeft;
+		float2 bottomRight;
 
 		Box2D()
 			: topLeft(-0.5f, 0.5f)

@@ -32,3 +32,8 @@ float Timer::GetCurrentTicks() {
 	return static_cast<float>(currentTicks);
 }
 
+void Timer::AdjustCurrentTime(uint timeStamp) { 
+	prevTicks += timeStamp - currentTicks;
+	currentTicks = timeStamp;
+}
+
